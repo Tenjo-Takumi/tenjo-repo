@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPIT Midterm Reviewer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --card: #181c27;
+    --border: #252a38;
+    --accent: #6c8eff;
+    --accent2: #ff6c8e;
+    --accent3: #6cffc8;
+    --text: #e8eaf2;
+    --muted: #6b7385;
+    --success: #43e97b;
+    --danger: #ff5c7a;
+    --warn: #ffd166;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG Pattern */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(108,142,255,0.07) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255,108,142,0.06) 0%, transparent 50%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ====== HEADER ====== */
+  header {
+    position: relative; z-index: 10;
+    padding: 2.5rem 2rem 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,142,255,0.15);
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2rem;
+    border: 1px solid rgba(108,142,255,0.3);
+    margin-bottom: 1rem;
+  }
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  header p {
+    margin-top: 0.6rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  /* ====== NAV TABS ====== */
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.5rem 1rem;
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,15,20,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0.55rem 1.2rem;
+    border-radius: 2rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .tab-btn:hover { color: var(--text); border-color: var(--accent); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  .tab-btn.active.pink { background: var(--accent2); border-color: var(--accent2); }
+  .tab-btn.active.green { background: var(--accent3); color: var(--bg); border-color: var(--accent3); }
+
+  /* ====== MAIN CONTENT ====== */
+  main { position: relative; z-index: 1; padding: 2rem 1rem; max-width: 900px; margin: 0 auto; }
+  .section { display: none; }
+  .section.active { display: block; animation: fadeUp 0.3s ease; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+  }
+  .section-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.8rem; }
+
+  /* ====== SCORE HUD ====== */
+  .score-hud {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .hud-card {
+    flex: 1; min-width: 100px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    text-align: center;
+  }
+  .hud-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+  .hud-lbl { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .hud-val.blue { color: var(--accent); }
+  .hud-val.green { color: var(--success); }
+  .hud-val.red { color: var(--danger); }
+
+  /* ====== ACTION BUTTONS ====== */
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0.6rem 1.3rem;
+    border-radius: 2rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--accent); color: var(--bg); }
+  .btn-primary:hover { background: #8aa6ff; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--accent); }
+
+  /* ====== MATCHING TYPE ====== */
+  #matching .pairs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+  }
+  .pair-col { display: flex; flex-direction: column; gap: 0.5rem; }
+  .pair-item {
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    position: relative;
+  }
+  .term-item {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+  }
+  .term-item.selected { border-color: var(--accent); background: rgba(108,142,255,0.12); }
+  .term-item.matched-correct { border-color: var(--success); background: rgba(67,233,123,0.1); color: var(--success); }
+  .term-item.matched-wrong { border-color: var(--danger); background: rgba(255,92,122,0.1); animation: shake 0.4s; }
+
+  .def-item {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    color: var(--muted);
+  }
+  .def-item.highlight { border-color: rgba(108,142,255,0.5); color: var(--text); }
+  .def-item.matched-correct { border-color: var(--success); background: rgba(67,233,123,0.08); color: var(--success); }
+  .def-item.matched-wrong { border-color: var(--danger); animation: shake 0.4s; }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  .match-letter {
+    display: inline-block;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 800;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(108,142,255,0.2);
+    color: var(--accent);
+    text-align: center; line-height: 22px;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  /* ====== CASE SCENARIO ====== */
+  .scenario-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+  .scenario-tag {
+    display: inline-block;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    margin-bottom: 0.8rem;
+  }
+  .tag-privacy { background: rgba(108,142,255,0.15); color: var(--accent); }
+  .tag-ethics { background: rgba(255,108,142,0.15); color: var(--accent2); }
+  .tag-cyber { background: rgba(108,255,200,0.15); color: var(--accent3); }
+  .tag-ip { background: rgba(255,209,102,0.15); color: var(--warn); }
+
+  .scenario-text {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 1.2rem;
+    border-left: 3px solid var(--accent);
+    padding-left: 1rem;
+    font-style: italic;
+  }
+  .scenario-question {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+  .choices { display: flex; flex-direction: column; gap: 0.5rem; }
+  .choice-btn {
+    display: flex; align-items: flex-start; gap: 0.7rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.87rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1.5;
+  }
+  .choice-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(108,142,255,0.07); }
+  .choice-btn.correct { border-color: var(--success); background: rgba(67,233,123,0.1); color: var(--success); }
+  .choice-btn.wrong { border-color: var(--danger); background: rgba(255,92,122,0.08); color: var(--danger); }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 800;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--border);
+    text-align: center; line-height: 22px;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .choice-btn.correct .choice-letter { background: var(--success); color: var(--bg); }
+  .choice-btn.wrong .choice-letter { background: var(--danger); color: white; }
+
+  .explanation-box {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
+    background: rgba(108,142,255,0.08);
+    border: 1px solid rgba(108,142,255,0.2);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .explanation-box.show { display: block; animation: fadeUp 0.3s ease; }
+  .explanation-box strong { color: var(--accent); }
+
+  /* ====== DIFFERENTIATION ====== */
+  .diff-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .diff-header {
+    padding: 1rem 1.5rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .diff-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .diff-col {
+    padding: 1.2rem 1.5rem;
+  }
+  .diff-col:first-child { border-right: 1px solid var(--border); }
+  .diff-col-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid;
+  }
+  .col-a .diff-col-title { color: var(--accent); border-color: var(--accent); }
+  .col-b .diff-col-title { color: var(--accent2); border-color: var(--accent2); }
+
+  .diff-row {
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .diff-aspect {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.2rem;
+  }
+  .diff-val {
+    font-size: 0.87rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  /* Flashcard for diff quiz */
+  .flip-card {
+    perspective: 1000px;
+    height: 180px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+  }
+  .flip-inner {
+    position: relative; width: 100%; height: 100%;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+  }
+  .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip-front, .flip-back {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .flip-front {
+    background: var(--card);
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .flip-back {
+    background: linear-gradient(135deg, rgba(108,142,255,0.15), rgba(255,108,142,0.1));
+    transform: rotateY(180deg);
+    font-size: 0.87rem;
+    line-height: 1.6;
+    color: var(--text);
+    border-color: rgba(108,142,255,0.3);
+  }
+  .flip-hint {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  /* ====== PROGRESS BAR ====== */
+  .progress-wrap {
+    background: var(--border);
+    border-radius: 2rem;
+    height: 5px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    border-radius: 2rem;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.4s ease;
+  }
+
+  /* ====== CONTROLS ====== */
+  .controls {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .set-selector {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.5rem 0.9rem;
+    border-radius: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .set-selector.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .set-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-right: 0.3rem;
+  }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 600px) {
+    #matching .pairs-grid { grid-template-columns: 1fr; }
+    .diff-cols { grid-template-columns: 1fr; }
+    .diff-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    nav { gap: 0.3rem; }
+    .tab-btn { font-size: 0.73rem; padding: 0.45rem 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Midterm Reviewer</div>
+  <h1>Social &amp; Professional Issues<br>in Information Technology</h1>
+  <p>Three exam modes · Ethics · Privacy · IP · Cybercrime</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('matching', this)">🔗 Matching</button>
+  <button class="tab-btn pink" onclick="showTab('case', this)">📋 Case Scenarios</button>
+  <button class="tab-btn green" onclick="showTab('diff', this)">⚡ Differentiation</button>
+</nav>
+
+<main>
+
+<!-- ========== MATCHING TYPE ========== -->
+<section id="matching" class="section active">
+  <div class="section-title">Matching Type</div>
+  <div class="section-sub">Click a term on the left, then click its matching definition on the right.</div>
+
+  <div class="score-hud">
+    <div class="hud-card"><div class="hud-val blue" id="m-score">0</div><div class="hud-lbl">Score</div></div>
+    <div class="hud-card"><div class="hud-val green" id="m-correct">0</div><div class="hud-lbl">Correct</div></div>
+    <div class="hud-card"><div class="hud-val red" id="m-wrong">0</div><div class="hud-lbl">Wrong</div></div>
+    <div class="hud-card"><div class="hud-val" id="m-remain" style="color:var(--warn)">10</div><div class="hud-lbl">Left</div></div>
+  </div>
+
+  <div class="controls">
+    <span class="set-label">SET:</span>
+    <button class="set-selector active" onclick="loadMatchSet(0, this)">Ethics</button>
+    <button class="set-selector" onclick="loadMatchSet(1, this)">Privacy</button>
+    <button class="set-selector" onclick="loadMatchSet(2, this)">IP &amp; Cybercrime</button>
+    <button class="btn btn-ghost" style="margin-left:auto" onclick="resetMatch()">↺ Reset</button>
+  </div>
+
+  <div id="match-grid" class="pairs-grid"></div>
+</section>
+
+<!-- ========== CASE SCENARIOS ========== -->
+<section id="case" class="section">
+  <div class="section-title">Case Scenarios</div>
+  <div class="section-sub">Read each scenario and choose the best answer. Explanations appear after you answer.</div>
+
+  <div class="score-hud">
+    <div class="hud-card"><div class="hud-val blue" id="c-score">0</div><div class="hud-lbl">Score</div></div>
+    <div class="hud-card"><div class="hud-val green" id="c-correct">0</div><div class="hud-lbl">Correct</div></div>
+    <div class="hud-card"><div class="hud-val red" id="c-wrong">0</div><div class="hud-lbl">Wrong</div></div>
+    <div class="hud-card"><div class="hud-val" id="c-remain" style="color:var(--warn)">0</div><div class="hud-lbl">Left</div></div>
+  </div>
+
+  <div class="progress-wrap"><div class="progress-bar" id="c-prog" style="width:0%"></div></div>
+  <div id="case-container"></div>
+  <div style="text-align:center; margin-top:1rem">
+    <button class="btn btn-ghost" onclick="resetCase()">↺ Reset All</button>
+  </div>
+</section>
+
+<!-- ========== DIFFERENTIATION ========== -->
+<section id="diff" class="section">
+  <div class="section-title">Differentiation</div>
+  <div class="section-sub">Compare key concepts side-by-side. Click the flashcards to test yourself!</div>
+
+  <div class="controls">
+    <span class="set-label">VIEW:</span>
+    <button class="set-selector active" onclick="showDiffView('tables', this)">📊 Tables</button>
+    <button class="set-selector" onclick="showDiffView('flashcards', this)">🃏 Flashcards</button>
+  </div>
+
+  <div id="diff-tables"></div>
+  <div id="diff-flashcards" style="display:none"></div>
+</section>
+
+</main>
+
+<script>
+// ===================== DATA =====================
+
+const matchSets = [
+  // SET 0: Ethics
+  {
+    pairs: [
+      { term: "Meta-ethics", def: "Explores the nature of morality itself (e.g., 'What does good mean?')" },
+      { term: "Normative Ethics", def: "Establishes rules or principles for moral behavior" },
+      { term: "Applied Ethics", def: "Applies ethical theories to real-world issues like medical or business ethics" },
+      { term: "Relativism", def: "Theory that there are no universal moral norms of right and wrong" },
+      { term: "Divine Command Theory", def: "An act is moral because God commands it; based on obedience not reason" },
+      { term: "Consequentialism", def: "'The end justifies the means'; morality based on outcomes" },
+      { term: "Kantianism", def: "Duty-based ethics; act morally regardless of consequences" },
+      { term: "Virtue Ethics", def: "Morality is about developing good character traits like courage and honesty" },
+      { term: "Contractarianism", def: "Morality arises from agreements among people to form a stable society" },
+      { term: "Care Ethics", def: "Morality is about maintaining relationships with care and empathy" },
+    ]
+  },
+  // SET 1: Privacy
+  {
+    pairs: [
+      { term: "Accessibility Privacy", def: "Being physically let alone; free from intrusion into one's physical space" },
+      { term: "Decisional Privacy", def: "Freedom from interference in one's choices and decisions" },
+      { term: "Informational Privacy", def: "Control over the flow of one's personal information" },
+      { term: "Data Subject", def: "An individual whose personal information is processed" },
+      { term: "Personal Information Controller (PIC)", def: "Person or organization that controls the collection and processing of personal data" },
+      { term: "Personal Information Processor (PIP)", def: "Person or organization to whom a PIC outsources the processing of personal data" },
+      { term: "Sensitive Personal Information", def: "Includes race, health, political affiliation, government-issued IDs, and classified data" },
+      { term: "Phishing", def: "High-tech scam using spam or pop-ups to deceive a person into revealing personal information" },
+      { term: "Identity Theft", def: "Using another person's information fraudulently for goods, services, or credit" },
+      { term: "Right to Erasure", def: "Data subject's right to suspend, withdraw, or order blocking/destruction of personal data" },
+    ]
+  },
+  // SET 2: IP & Cybercrime
+  {
+    pairs: [
+      { term: "Copyright", def: "Author's legal ownership of original intellectual creations in literary and artistic domains" },
+      { term: "Patent", def: "Protects new and non-obvious inventions; not applicable to computer programs alone" },
+      { term: "Trademark", def: "Source identifiers like brand names and logos; can last forever with renewal" },
+      { term: "Trade Secret", def: "Formula, pattern or process known only to its owner giving business advantage" },
+      { term: "Decompilation", def: "Reproduction and translation of a computer program to achieve inter-operability; a fair use example" },
+      { term: "Cyber-squatting", def: "Acquiring a domain name in bad faith to profit, mislead, or destroy reputation" },
+      { term: "Data Interference", def: "Intentional or reckless alteration, damaging, or deletion of computer data without right" },
+      { term: "System Interference", def: "Intentional alteration or reckless hindering of a computer system's functioning" },
+      { term: "Illegal Access", def: "Intentional access to the whole or any part of a computer system without right (hacking)" },
+      { term: "Cyber Libel", def: "Defamatory content published through electronic means; punished one degree higher than ordinary libel" },
+    ]
+  }
+];
+
+const caseScenarios = [
+  {
+    tag: "ethics", tagLabel: "Ethics Theory",
+    scenario: "Maria posted online that she supports bribing government officials because it 'gets things done faster in the Philippines.' She argues that the outcome (faster service) justifies the action.",
+    question: "Which ethical theory best describes Maria's reasoning?",
+    choices: ["Virtue Ethics", "Kantianism (Deontology)", "Consequentialism", "Divine Command Theory"],
+    correct: 2,
+    explanation: "<strong>Consequentialism</strong> holds that 'the end justifies the means.' Maria judges the bribery as acceptable because of its result (faster service), not because of the act itself. Kantianism would reject this because the action (bribery) is inherently wrong regardless of outcome."
+  },
+  {
+    tag: "privacy", tagLabel: "Data Privacy Act",
+    scenario: "A hospital uploads patient records including diagnoses, medications, and RT-PCR results to a cloud server accessible by its marketing department for 'analysis purposes' without informing patients.",
+    question: "Which principle of the Data Privacy Act (RA 10173) is most clearly violated?",
+    choices: ["Right to Erasure", "Legitimate Purpose and Transparency", "Right to Data Portability", "Right to Object"],
+    correct: 1,
+    explanation: "<strong>Legitimate Purpose and Transparency</strong> require that personal data be collected for lawful, declared purposes and that individuals be informed of how their data is used. Sharing sensitive medical data with a marketing department without consent violates both. Medical records are also <em>Sensitive Personal Information</em> requiring extra protection."
+  },
+  {
+    tag: "cyber", tagLabel: "Cybercrime Law",
+    scenario: "Rodel registered the domain name 'jolibee-foods.ph' offering to sell it to Jollibee Corporation for ₱5 million. He had no prior connection to the Jollibee brand.",
+    question: "What cybercrime offense under RA 10175 did Rodel commit?",
+    choices: ["Illegal Access", "Computer-Related Fraud", "Cyber-squatting", "Misuse of Devices"],
+    correct: 2,
+    explanation: "<strong>Cyber-squatting</strong> is the acquisition of a domain name in bad faith to profit, mislead, destroy reputation, or deprive others from registering it. Rodel's domain is 'confusingly similar' to Jollibee's trademark and he is attempting to profit from it — a textbook cyber-squatting case."
+  },
+  {
+    tag: "ip", tagLabel: "Intellectual Property",
+    scenario: "Ana is a software developer employed by TechCorp. During office hours and using company computers, she developed a new inventory management app. When TechCorp claimed ownership, Ana argued it was her creation.",
+    question: "Under RA 8293 (IP Code), who owns the copyright of the app?",
+    choices: ["Ana, because she is the actual author", "TechCorp, because it was made during employment using company resources for assigned duties", "Both share the copyright equally", "The government, since it was developed using corporate resources"],
+    correct: 1,
+    explanation: "Under <strong>Section 178.3 of the IP Code</strong>, if a work is the result of an employee's <em>regularly-assigned duties</em> using company time, facilities, and materials, the copyright belongs to the <strong>employer</strong> — unless there is an agreement stating otherwise. Since developing software was Ana's assigned duty at TechCorp, TechCorp owns the copyright."
+  },
+  {
+    tag: "privacy", tagLabel: "Data Breach",
+    scenario: "GreenBank's IT security team discovers that hackers accessed its database containing the account numbers, addresses, and financial records of 500,000 clients. The IT manager wants to keep it quiet to avoid public panic.",
+    question: "What is GreenBank's correct legal obligation under the Data Privacy Act?",
+    choices: ["Keep it confidential and handle it internally", "Notify only the clients affected but not the NPC", "Notify the National Privacy Commission (NPC) and affected individuals, and take corrective measures", "Wait 30 days before reporting to see if the threat resolves itself"],
+    correct: 2,
+    explanation: "Under the <strong>Data Privacy Act</strong>, organizations must: (1) <strong>Notify the NPC</strong>, (2) <strong>Inform affected individuals</strong>, and (3) <strong>Take immediate corrective measures</strong>. Failure to report may result in additional penalties. Concealing a breach is itself a violation of law."
+  },
+  {
+    tag: "ethics", tagLabel: "Computer Ethics",
+    scenario: "During a debate, Professor Santos argues that IT professionals should not be held to universal moral rules. He says each developer is free to write programs according to their own values and what feels right to them personally.",
+    question: "Professor Santos' position most closely represents which ethical theory?",
+    choices: ["Cultural Relativism", "Subjective Relativism", "Contractarianism", "Virtue Ethics"],
+    correct: 1,
+    explanation: "<strong>Subjective Relativism</strong> holds that an action is morally right if the individual approves of it. Moral rightness is relative to individuals, not cultures. Cultural Relativism would argue morality differs between societies (not individuals). Since Prof. Santos says each developer follows their <em>own</em> values, this is Subjective Relativism."
+  },
+  {
+    tag: "cyber", tagLabel: "Cyber Libel",
+    scenario: "Kristine posted on Facebook: 'Councilor Reyes is a drug lord who runs operations in our barangay — I have proof!' The statement was false and Kristine had no evidence. Councilor Reyes filed a case.",
+    question: "What crime did Kristine commit and under which law?",
+    choices: [
+      "Ordinary libel under the Revised Penal Code",
+      "Cyber libel under RA 10175; penalty is one degree higher than ordinary libel",
+      "Data interference under RA 10175",
+      "She is protected under Freedom of Expression (Art. III, Sec. 4)"
+    ],
+    correct: 1,
+    explanation: "<strong>Cyber libel</strong> under <strong>RA 10175</strong> applies because the defamatory statement was made through a computer system (Facebook). All elements are present: malicious imputation of a crime, made publicly, and directed at a natural person. The penalty is <em>one degree higher</em> than ordinary libel. Freedom of expression does not protect malicious false accusations."
+  },
+  {
+    tag: "ip", tagLabel: "Copyright vs Plagiarism",
+    scenario: "Carlo submitted a research paper to his professor. He copied three full paragraphs from an online article without citation or attribution, presenting them as his own analysis.",
+    question: "What has Carlo committed?",
+    choices: [
+      "Copyright infringement only — a legal offense",
+      "Plagiarism only — an ethical violation in academic settings",
+      "Both plagiarism and copyright infringement",
+      "Neither — fair use allows copying for educational purposes"
+    ],
+    correct: 2,
+    explanation: "Carlo committed <strong>both</strong>: <strong>Plagiarism</strong> (ethical violation — taking credit for someone else's work without attribution) and <strong>Copyright Infringement</strong> (legal violation — reproducing a protected work without permission). Fair use does not apply because he copied entire paragraphs (substantial portion) and did not attribute the source."
+  }
+];
+
+const diffData = [
+  {
+    title: "Plagiarism vs. Copyright Infringement",
+    aspects: ["Nature", "Domain", "Basis", "Example", "Remedy"],
+    a: { label: "Plagiarism", vals: [
+      "Ethical violation",
+      "Academic / Professional",
+      "Moral — taking credit for others' work",
+      "Submitting a copied essay as your own",
+      "Academic sanctions (expulsion, failing grade)"
+    ]},
+    b: { label: "Copyright Infringement", vals: [
+      "Legal violation",
+      "Legal / Civil / Criminal",
+      "Reproducing protected work without permission",
+      "Publishing someone's book without a license",
+      "Civil damages, injunctions, criminal penalties"
+    ]}
+  },
+  {
+    title: "Cyber Libel vs. Ordinary Libel",
+    aspects: ["Medium", "Law", "Venue of Filing", "Penalty", "Reach"],
+    a: { label: "Cyber Libel", vals: [
+      "Computer system / Internet (Facebook, blogs, etc.)",
+      "RA 10175 – Cybercrime Prevention Act",
+      "RTC where offended party resides",
+      "One degree HIGHER than ordinary libel",
+      "Global; difficult to retract; permanent"
+    ]},
+    b: { label: "Ordinary Libel", vals: [
+      "Writing, printing, radio, painting, etc.",
+      "Revised Penal Code (Art. 353-355)",
+      "RTC where article was printed/first published OR where offended party resides",
+      "Prisión correccional (min-med) or fine ₱200–₱6,000",
+      "Local/limited distribution"
+    ]}
+  },
+  {
+    title: "Data Interference vs. System Interference",
+    aspects: ["Target", "Actions Involved", "Scope", "Example", "Key Distinction"],
+    a: { label: "Data Interference", vals: [
+      "Computer data, electronic documents",
+      "Alteration, deletion, deterioration of data",
+      "Data and files level",
+      "Deleting database records; introducing a virus that corrupts files",
+      "Directed at DATA — the content stored in systems"
+    ]},
+    b: { label: "System Interference", vals: [
+      "Functioning of a computer or network",
+      "Hindering, disrupting, or altering system operations",
+      "System and network level",
+      "DDoS attack that crashes a server",
+      "Directed at the SYSTEM — its operations and functions"
+    ]}
+  },
+  {
+    title: "Patent vs. Copyright vs. Trademark",
+    aspects: ["Protects", "Duration", "Registration", "Computer Programs?", "Philippine Law"],
+    a: { label: "Patent", vals: [
+      "New, non-obvious inventions",
+      "20 years from filing date",
+      "Required — must apply with IPOPHIL",
+      "NOT patentable under Sec. 22.2 RA 8293",
+      "RA 8293 – Intellectual Property Code"
+    ]},
+    b: { label: "Copyright", vals: [
+      "Original works of authorship (books, software, music)",
+      "Life of author + 70 years",
+      "NOT required — protection from moment of creation",
+      "YES — explicitly listed in Sec. 172 RA 8293",
+      "RA 8293 – Intellectual Property Code"
+    ]}
+  },
+  {
+    title: "Personal Information vs. Sensitive Personal Information",
+    aspects: ["Definition", "Examples", "Level of Protection", "Processing Allowed?", "Philippine Law"],
+    a: { label: "Personal Information", vals: [
+      "Info from which individual identity is apparent or ascertainable",
+      "Name, address, phone number, birthday, photo",
+      "Standard — requires consent and legitimate purpose",
+      "Yes, with consent and for lawful purposes",
+      "RA 10173 – Data Privacy Act of 2012"
+    ]},
+    b: { label: "Sensitive Personal Information", vals: [
+      "Info about race, health, sexual life, religion, political affiliation, gov't-issued IDs",
+      "Bank account, driver's license, PCR result, gender, nationality",
+      "Heightened — stricter requirements for processing",
+      "Only in specific cases listed in Sec. 13 RA 10173",
+      "RA 10173 – Data Privacy Act of 2012"
+    ]}
+  },
+  {
+    title: "Substantive Law vs. Procedural Law",
+    aspects: ["Focus", "Content", "Example in Cybercrime", "Purpose", "Analogy"],
+    a: { label: "Substantive Law", vals: [
+      "Defines rights, duties, and what constitutes a crime",
+      "Describes illegal acts and their penalties",
+      "RA 10175 Sec. 4 — defines cybercrime offenses",
+      "Establishes WHAT is a crime",
+      "Defines the rules of the game"
+    ]},
+    b: { label: "Procedural Law", vals: [
+      "Governs HOW substantive law is applied and enforced",
+      "Rules of evidence, court procedures, enforcement",
+      "RA 10175 Sec. 12–14 — real-time data collection, preservation",
+      "Establishes HOW to prosecute and enforce",
+      "Defines how the game is played"
+    ]}
+  }
+];
+
+const flashcards = [
+  { front: "Subjective Relativism vs. Cultural Relativism", back: "Subjective: Morality is relative to INDIVIDUALS — each person decides what is right for them.\n\nCultural: Morality is relative to CULTURES — right/wrong depends on a society's guidelines." },
+  { front: "PIC vs. PIP", back: "PIC (Personal Information Controller): Controls collection, holding, processing or use of personal data.\n\nPIP (Personal Information Processor): Entity to whom the PIC outsources the actual processing of data." },
+  { front: "Illegal Access vs. Illegal Interception", back: "Illegal Access: Unauthorized entry INTO a computer system (hacking).\n\nIllegal Interception: Unauthorized listening/recording of NON-PUBLIC data TRANSMISSION (eavesdropping)." },
+  { front: "Computer-Related Forgery vs. Computer-Related Fraud", back: "Forgery: Input/alteration/deletion of data to create INAUTHENTIC data intended to appear authentic.\n\nFraud: Unauthorized input/alteration/interference in a computer system with FRAUDULENT INTENT to cause damage." },
+  { front: "Punishable Levels: Purposely vs. Wilfully vs. Recklessly vs. Negligently", back: "Purposely: INTENT to cause harm.\nWilfully: Aware it causes harm but does it anyway.\nRecklessly: Aware of risk but ignores it.\nNegligently: UNAWARE of negative consequences (lowest level)." },
+  { front: "Copyright Ownership: Employee-Created Work", back: "Employee owns copyright IF: the work was NOT part of regular duties (even if using company time/resources).\n\nEmployer owns copyright IF: the work resulted from regularly-assigned duties — unless otherwise agreed." },
+];
+
+// ===================== MATCHING LOGIC =====================
+let matchState = { set: 0, selected: null, correct: 0, wrong: 0, matched: new Set() };
+let currentMatchPairs = [];
+
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+function loadMatchSet(idx, btn) {
+  document.querySelectorAll('#matching .set-selector').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  matchState = { set: idx, selected: null, correct: 0, wrong: 0, matched: new Set() };
+  renderMatch(idx);
+  updateMatchHUD();
+}
+
+function renderMatch(idx) {
+  const pairs = matchSets[idx].pairs;
+  currentMatchPairs = shuffle(pairs);
+  const shuffledDefs = shuffle(currentMatchPairs.map((p,i) => ({def: p.def, origIdx: i})));
+  
+  const grid = document.getElementById('match-grid');
+  grid.innerHTML = '';
+  
+  const termCol = document.createElement('div');
+  termCol.className = 'pair-col';
+  const defCol = document.createElement('div');
+  defCol.className = 'pair-col';
+  
+  currentMatchPairs.forEach((pair, i) => {
+    const t = document.createElement('div');
+    t.className = 'pair-item term-item';
+    t.dataset.idx = i;
+    t.innerHTML = `<span class="match-letter">${String.fromCharCode(65+i)}</span>${pair.term}`;
+    t.onclick = () => selectTerm(i, t);
+    termCol.appendChild(t);
+  });
+  
+  shuffledDefs.forEach((d, i) => {
+    const el = document.createElement('div');
+    el.className = 'pair-item def-item';
+    el.dataset.origIdx = d.origIdx;
+    el.textContent = d.def;
+    el.onclick = () => selectDef(d.origIdx, el);
+    defCol.appendChild(el);
+  });
+  
+  grid.appendChild(termCol);
+  grid.appendChild(defCol);
+}
+
+function selectTerm(idx, el) {
+  if (matchState.matched.has(idx + '-term')) return;
+  document.querySelectorAll('.term-item').forEach(t => t.classList.remove('selected'));
+  matchState.selected = idx;
+  el.classList.add('selected');
+  document.querySelectorAll('.def-item').forEach(d => d.classList.add('highlight'));
+}
+
+function selectDef(origIdx, el) {
+  if (matchState.selected === null) return;
+  const termIdx = matchState.selected;
+  if (matchState.matched.has(termIdx + '-term')) return;
+  
+  const termEl = document.querySelector(`.term-item[data-idx="${termIdx}"]`);
+  
+  if (origIdx === termIdx) {
+    // Correct
+    termEl.classList.remove('selected');
+    termEl.classList.add('matched-correct');
+    el.classList.add('matched-correct');
+    el.classList.remove('highlight');
+    matchState.matched.add(termIdx + '-term');
+    matchState.correct++;
+  } else {
+    // Wrong
+    termEl.classList.add('matched-wrong');
+    el.classList.add('matched-wrong');
+    setTimeout(() => {
+      termEl.classList.remove('matched-wrong');
+      el.classList.remove('matched-wrong');
+    }, 600);
+    matchState.wrong++;
+  }
+  
+  document.querySelectorAll('.def-item').forEach(d => d.classList.remove('highlight'));
+  matchState.selected = null;
+  updateMatchHUD();
+}
+
+function updateMatchHUD() {
+  const total = currentMatchPairs.length;
+  const done = matchState.matched.size;
+  document.getElementById('m-score').textContent = Math.round((matchState.correct / Math.max(matchState.correct + matchState.wrong, 1)) * 100) + '%';
+  document.getElementById('m-correct').textContent = matchState.correct;
+  document.getElementById('m-wrong').textContent = matchState.wrong;
+  document.getElementById('m-remain').textContent = total - done;
+}
+
+function resetMatch() {
+  const activeBtn = document.querySelector('#matching .set-selector.active');
+  matchState = { set: matchState.set, selected: null, correct: 0, wrong: 0, matched: new Set() };
+  renderMatch(matchState.set);
+  updateMatchHUD();
+}
+
+// ===================== CASE SCENARIO LOGIC =====================
+let caseState = { answered: {}, correct: 0, wrong: 0 };
+
+function renderCases() {
+  const container = document.getElementById('case-container');
+  container.innerHTML = '';
+  caseScenarios.forEach((sc, si) => {
+    const card = document.createElement('div');
+    card.className = 'scenario-card';
+    card.id = `case-${si}`;
+    
+    const tagClass = { ethics: 'tag-ethics', privacy: 'tag-privacy', cyber: 'tag-cyber', ip: 'tag-ip' }[sc.tag] || 'tag-ethics';
+    const letters = 'ABCD';
+    const choicesHTML = sc.choices.map((c, ci) =>
+      `<button class="choice-btn" onclick="answerCase(${si}, ${ci})" id="c-${si}-${ci}">
+        <span class="choice-letter">${letters[ci]}</span>
+        <span>${c}</span>
+      </button>`
+    ).join('');
+    
+    card.innerHTML = `
+      <span class="scenario-tag ${tagClass}">${sc.tagLabel}</span>
+      <div class="scenario-text">${sc.scenario}</div>
+      <div class="scenario-question">${si+1}. ${sc.question}</div>
+      <div class="choices">${choicesHTML}</div>
+      <div class="explanation-box" id="exp-${si}">${sc.explanation}</div>
+    `;
+    container.appendChild(card);
+  });
+  updateCaseHUD();
+}
+
+function answerCase(si, ci) {
+  if (caseState.answered[si] !== undefined) return;
+  caseState.answered[si] = ci;
+  const correct = caseScenarios[si].correct;
+  
+  document.querySelectorAll(`#case-${si} .choice-btn`).forEach(b => b.disabled = true);
+  
+  document.getElementById(`c-${si}-${ci}`).classList.add(ci === correct ? 'correct' : 'wrong');
+  if (ci !== correct) {
+    document.getElementById(`c-${si}-${correct}`).classList.add('correct');
+    caseState.wrong++;
+  } else {
+    caseState.correct++;
+  }
+  
+  document.getElementById(`exp-${si}`).classList.add('show');
+  updateCaseHUD();
+}
+
+function updateCaseHUD() {
+  const answered = Object.keys(caseState.answered).length;
+  const total = caseScenarios.length;
+  document.getElementById('c-score').textContent = Math.round((caseState.correct / Math.max(answered, 1)) * 100) + '%';
+  document.getElementById('c-correct').textContent = caseState.correct;
+  document.getElementById('c-wrong').textContent = caseState.wrong;
+  document.getElementById('c-remain').textContent = total - answered;
+  document.getElementById('c-prog').style.width = (answered / total * 100) + '%';
+}
+
+function resetCase() {
+  caseState = { answered: {}, correct: 0, wrong: 0 };
+  renderCases();
+}
+
+// ===================== DIFFERENTIATION LOGIC =====================
+function renderDiffTables() {
+  const container = document.getElementById('diff-tables');
+  container.innerHTML = '';
+  diffData.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'diff-card';
+    card.innerHTML = `
+      <div class="diff-header">${d.title}</div>
+      <div class="diff-cols">
+        <div class="diff-col col-a">
+          <div class="diff-col-title">${d.a.label}</div>
+          <div class="diff-row">
+            ${d.a.vals.map((v,i) => `
+              <div>
+                <div class="diff-aspect">${d.aspects[i]}</div>
+                <div class="diff-val">${v}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <div class="diff-col col-b">
+          <div class="diff-col-title">${d.b.label}</div>
+          <div class="diff-row">
+            ${d.b.vals.map((v,i) => `
+              <div>
+                <div class="diff-aspect">${d.aspects[i]}</div>
+                <div class="diff-val">${v}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function renderFlashcards() {
+  const container = document.getElementById('diff-flashcards');
+  container.innerHTML = `<div class="flip-hint">👆 Click any card to reveal the difference</div>`;
+  flashcards.forEach((fc, i) => {
+    const card = document.createElement('div');
+    card.className = 'flip-card';
+    card.innerHTML = `
+      <div class="flip-inner">
+        <div class="flip-front">${fc.front}</div>
+        <div class="flip-back" style="white-space: pre-line">${fc.back}</div>
+      </div>
+    `;
+    card.onclick = () => card.classList.toggle('flipped');
+    container.appendChild(card);
+  });
+}
+
+function showDiffView(view, btn) {
+  document.querySelectorAll('#diff .set-selector').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('diff-tables').style.display = view === 'tables' ? '' : 'none';
+  document.getElementById('diff-flashcards').style.display = view === 'flashcards' ? '' : 'none';
+}
+
+// ===================== TAB SWITCHING =====================
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===================== INIT =====================
+renderMatch(0);
+renderCases();
+renderDiffTables();
+renderFlashcards();
+</script>
+</body>
+</html>
