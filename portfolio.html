@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ITEC 23 Digital Portfolio</title>
+<title>ITEC23 Digital Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -52,6 +52,10 @@
     display: flex; flex-direction: column;
     z-index: 100;
     overflow-y: hidden;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none;
   }
 
   .sidebar-logo {
@@ -281,7 +285,7 @@
 
   /* ── PROSE ── */
   .prose p {
-    max-width: 680px;
+    max-width: 820px;
     color: #2d2a24;
     margin-bottom: 20px;
     font-weight: 300;
@@ -340,11 +344,6 @@
     top: 0; right: 0;
     width: 80px; height: 80px;
     background: radial-gradient(ellipse at top right, rgba(185,74,44,0.4), transparent 60%);
-  }
-
-  .obj-card-icon {
-    font-size: 28px;
-    margin-bottom: 16px;
   }
 
   .obj-card h3 {
@@ -465,25 +464,6 @@
     max-width: 500px;
   }
 
-  .incident-badge {
-    text-align: center;
-    flex-shrink: 0;
-  }
-
-  .incident-badge-icon {
-    font-size: 52px;
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  .incident-badge-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: rgba(245,240,232,0.4);
-  }
-
   /* ── ETHICS THEORIES ── */
   .theory-grid {
     display: grid;
@@ -511,8 +491,6 @@
   .theory-card.deontology::after { background: var(--slate); }
   .theory-card.virtue::after { background: var(--forest); }
   .theory-card.utilitarian::after { background: var(--rust); }
-
-  .theory-icon { font-size: 28px; margin-bottom: 14px; }
 
   .theory-name {
     font-family: 'Playfair Display', serif;
@@ -722,84 +700,6 @@
   .code-str { color: #9db891; }
   .code-cmt { color: rgba(255,255,255,0.25); font-style: italic; }
 
-  /* ── RANSOMWARE VISUAL ── */
-  .ransomware-visual {
-    background: #0d0d0d;
-    border: 1px solid #ff3333;
-    border-radius: 8px;
-    padding: 32px;
-    font-family: 'JetBrains Mono', monospace;
-    margin: 24px 0;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .ransomware-visual::before {
-    content: '⚠ RANSOMWARE SIMULATION — EDUCATIONAL PURPOSES ONLY';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    background: #ff3333;
-    color: white;
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    padding: 4px 16px;
-    text-align: center;
-  }
-
-  .rv-title {
-    font-size: 20px;
-    color: #ff4444;
-    font-weight: 700;
-    margin: 24px 0 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 20px rgba(255,68,68,0.5);
-  }
-
-  .rv-sub { font-size: 11px; color: #888; margin-bottom: 20px; }
-
-  .rv-demand {
-    background: rgba(255,68,68,0.1);
-    border: 1px solid rgba(255,68,68,0.3);
-    border-radius: 4px;
-    padding: 16px;
-    margin-bottom: 12px;
-  }
-
-  .rv-demand p { font-size: 12px; color: #ccc; line-height: 1.8; }
-  .rv-demand strong { color: #ff8888; }
-
-  .rv-btc {
-    font-size: 13px;
-    color: #f7931a;
-    margin-top: 16px;
-    padding: 12px;
-    background: rgba(247,147,26,0.1);
-    border-radius: 4px;
-    word-break: break-all;
-  }
-
-  .rv-timer {
-    display: flex;
-    gap: 12px;
-    margin-top: 20px;
-    font-size: 28px;
-    font-weight: 700;
-    color: #ff4444;
-  }
-
-  .rv-timer-unit {
-    text-align: center;
-  }
-
-  .rv-timer-label {
-    font-size: 8px;
-    color: #666;
-    display: block;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
   /* ── PROGRESS BARS ── */
   .stat-grid {
     display: grid;
@@ -905,6 +805,52 @@
     background: var(--rust);
   }
 
+  /* ── HAMBURGER BUTTON (mobile only) ── */
+  .hamburger {
+    display: none;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 300;
+    width: 44px; height: 44px;
+    background: var(--ink);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  }
+
+  .hamburger span {
+    display: block;
+    width: 20px; height: 2px;
+    background: var(--paper);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Mobile nav overlay */
+  .mobile-nav-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .mobile-nav-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 1100px) {
     .sidebar { width: 220px; padding: 40px 24px; }
@@ -917,15 +863,125 @@
   }
 
   @media (max-width: 768px) {
-    .sidebar { display: none; }
+    /* Sidebar becomes a slide-in drawer */
+    .sidebar {
+      display: flex;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 85vw;
+      max-width: 300px;
+      z-index: 200;
+      overflow-y: auto !important;
+    }
+
+    .sidebar.open { transform: translateX(0); }
+
+    .hamburger { display: flex; }
+    .mobile-nav-overlay { display: block; }
+
     .main { margin-left: 0; }
     .reading-progress { left: 0; }
-    .hero, .section { padding: 48px 24px; }
-    .obj-grid { grid-template-columns: 1fr; }
+
+    /* Hero — extra top padding for hamburger button */
+    .hero {
+      padding: 88px 20px 48px;
+    }
+
+    .hero h1 { font-size: clamp(28px, 8vw, 38px); }
+
+    .hero-meta {
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    /* Sections */
+    .section { padding: 44px 18px; }
+
+    /* Section header — hide big decorative number on mobile */
+    .section-num { display: none; }
+
+    /* Prose full width */
+    .prose p { max-width: 100%; font-size: 16px; }
+
+    /* Grids → single column */
+    .obj-grid { grid-template-columns: 1fr; gap: 16px; }
     .theory-grid { grid-template-columns: 1fr; }
     .incident-banner { grid-template-columns: 1fr; }
-    .pledge-wrap { padding: 32px 24px; }
-    .footer { flex-direction: column; gap: 16px; text-align: center; }
+    .reflection-layout { grid-template-columns: 1fr; }
+    .reflection-aside { position: static; }
+
+    /* Incident banner — remove badge col on mobile */
+    .incident-badge { display: none; }
+    .incident-banner { padding: 28px 20px; }
+    .incident-title { font-size: 22px; }
+
+    /* Timeline — 2 cols on mobile instead of 4 */
+    .timeline-grid {
+      grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* Pledge */
+    .pledge-wrap { padding: 28px 18px; }
+    .pledge-wrap::before { font-size: 120px; top: -8px; left: 8px; }
+    .pledge-title { font-size: 20px; }
+    .pledge-num { font-size: 24px; }
+    .pledge-item { grid-template-columns: 32px 1fr; gap: 14px; }
+    .pledge-text h4 { font-size: 15px; }
+    .pledge-text p { font-size: 13px; }
+
+    /* Pledge signature stacked */
+    .pledge-signature { flex-direction: column; gap: 20px; }
+    .signature-line { width: 100%; }
+
+    /* Case block */
+    .case-block { padding: 20px 18px; }
+    .case-block p, .case-block li { max-width: 100%; font-size: 14.5px; }
+    .case-block h3 { font-size: 17px; }
+
+    /* Pull quote */
+    .pull-quote { padding: 16px 18px; max-width: 100%; }
+    .pull-quote blockquote { font-size: 16px; }
+
+    /* Theory card */
+    .theory-card { padding: 20px 18px; }
+    .theory-card p { font-size: 14px; }
+    .theory-name { font-size: 15px; }
+
+    /* Reflection aside cards */
+    .aside-card { padding: 18px; }
+    .aside-card p { font-size: 13px; }
+
+    /* Objectives cards */
+    .obj-card { padding: 22px 18px; }
+    .obj-card h3 { font-size: 16px; }
+    .obj-card p { font-size: 13.5px; }
+
+    /* Stat bars label wrap */
+    .stat-item-label { flex-direction: column; gap: 2px; }
+
+    /* Footer */
+    .footer {
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+      padding: 28px 18px;
+    }
+
+    /* Back to top */
+    .back-to-top { bottom: 20px; right: 14px; width: 40px; height: 40px; font-size: 16px; }
+  }
+
+  /* Extra small phones */
+  @media (max-width: 400px) {
+    .hero { padding: 80px 16px 40px; }
+    .hero h1 { font-size: 26px; }
+    .section { padding: 36px 16px; }
+    .section-title { font-size: 20px; }
+    .incident-title { font-size: 20px; }
+    .case-block { padding: 18px 14px; }
+    .pledge-wrap { padding: 24px 14px; }
+    .timeline-grid { grid-template-columns: 1fr 1fr !important; }
   }
 </style>
 </head>
@@ -935,9 +991,17 @@
   <div class="reading-progress-fill" id="readingProgress"></div>
 </div>
 
+<!-- MOBILE HAMBURGER -->
+<button class="hamburger" id="hamburger" aria-label="Open menu">
+  <span></span><span></span><span></span>
+</button>
+
+<!-- MOBILE OVERLAY -->
+<div class="mobile-nav-overlay" id="mobileOverlay"></div>
+
 <!-- SIDEBAR -->
 <nav class="sidebar">
-  <div class="sidebar-logo">ITEC 23 Portfolio</div>
+  <div class="sidebar-logo">ITEC23 Portfolio</div>
   <div class="sidebar-name">Social & Professional Issues in Information Technology</div>
 
   <div class="toc-label">Table of Contents</div>
@@ -950,8 +1014,8 @@
   </ul>
 
   <div class="sidebar-footer">
-    AY 2024–2025 · Individual Portfolio<br>
-    ITEC 23 — Ethical Computing
+    2026 · Individual Portfolio<br>
+    ITEC23 — Social & Professional Issues in Information Technology
   </div>
 </nav>
 
@@ -967,7 +1031,7 @@
     <div class="hero-meta">
       <div class="hero-meta-item">
         <div class="hero-meta-label">Subject</div>
-        <div class="hero-meta-value">ITEC 23</div>
+        <div class="hero-meta-value">ITEC23</div>
       </div>
       <div class="hero-meta-item">
         <div class="hero-meta-label">Focus</div>
@@ -993,39 +1057,21 @@
 
     <div class="prose">
       <p>
-        When I first enrolled in ITEC 23, I expected a technical course — algorithms, systems, frameworks. What I encountered instead was far more unsettling and, ultimately, more important: a course about power, responsibility, and the irreversible consequences of decisions made behind keyboards. The intersection of information technology with social life raises questions that cannot be solved by any amount of code. Who owns the data we generate every second of our lives? What do we owe the people whose systems we build or break? These are not abstract philosophical puzzles — they are live issues that shape careers, freedoms, and futures.
+        ITEC23 is a subject in our program, and at first I did not think much of it. I expected it to be just another set of rules and policies to memorize. Though going through it, I found myself actually thinking about things I had never think about before. This subject taught me that computer ethics is not just some list of commandments, but it is about the fact that every time we write a code, build a system, or even use a computer, we are making choices that can affect real people.
       </p>
       <p>
-        Two topics captured my attention above all others. The first is cybersecurity ethics — particularly ransomware and the grey zone between defensive research and criminal exploitation. I became fascinated by how rapidly a tool designed for legitimate penetration testing can be weaponized, and how organizations, individuals, and even governments struggle to respond without resorting to ethically dubious countermeasures. The second is the issue of online accountability: cyber libel, sextortion, and identity-based harassment. These are forms of violence that leave no bruises visible to the naked eye, yet they destroy reputations, careers, and mental health just as surely. The law often lags years behind the technology, and it falls to IT professionals to fill that gap responsibly.
+        What stood out to me in this subject are the things on Chapter 4. It talked about the real incidents that happened here in the Philippines, like when hackers stole the personal data of 70 million COMELEC voters in 2016, and when PhilHealth was attacked in 2023. Those stories mentioned were not some stories from another country, but It actually happened here in the Philippines. From this event, it made me realize that data privacy is not some legal topic in books. But It is something that IT professionals have to think about seriously in real life.
       </p>
       <p>
-        I believe these topics matter beyond the classroom because, as future IT professionals, we are not passive bystanders in the digital world — we are its architects. Every system we design, every line of code we deploy, either reinforces or dismantles existing power structures. ITEC 23 gave me a vocabulary and a framework for thinking about that responsibility, and this portfolio is my attempt to demonstrate what I have internalized, not just what I have memorized.
+        Being good at IT is not just about knowing how to code or fix systems. It is also about knowing how to do the right thing. This course helped me think more clearly about what it actually looks like in real life.
       </p>
     </div>
 
     <div class="pull-quote">
-      <blockquote>"With great computing power comes great ethical responsibility — and ignorance is not a defense."</blockquote>
-      <cite>Ethical Computing, Core Principle</cite>
+      <blockquote>"Just because you can build it doesn't mean you should."</blockquote>
+      <cite>A reminder I carry from this course</cite>
     </div>
 
-    <div class="stat-grid">
-      <div>
-        <div class="stat-item-label"><span>Cybercrimes Reported Globally (2023)</span><span>Millions</span></div>
-        <div class="stat-bar"><div class="stat-fill rust" style="width:0%" data-width="87%"></div></div>
-      </div>
-      <div>
-        <div class="stat-item-label"><span>Organizations Hit by Ransomware (2023)</span><span>~72%</span></div>
-        <div class="stat-bar"><div class="stat-fill gold" style="width:0%" data-width="72%"></div></div>
-      </div>
-      <div>
-        <div class="stat-item-label"><span>Incidents Involving Insider Threats</span><span>~34%</span></div>
-        <div class="stat-bar"><div class="stat-fill forest" style="width:0%" data-width="34%"></div></div>
-      </div>
-      <div>
-        <div class="stat-item-label"><span>Cases Resulting in Prosecution</span><span>~8%</span></div>
-        <div class="stat-bar"><div class="stat-fill slate" style="width:0%" data-width="8%"></div></div>
-      </div>
-    </div>
   </section>
 
   <!-- 02 OBJECTIVES -->
@@ -1041,30 +1087,26 @@
 
     <div class="prose">
       <p>
-        This portfolio aims to document and demonstrate my growth in understanding the ethical, social, and professional dimensions of information technology throughout ITEC 23. It serves as evidence that I have moved beyond passive learning — engaging with real-world incidents, applying ethical frameworks, and articulating a personal code of professional conduct that will guide my practice as an IT professional.
+        This portfolio is my way of showing what I've learned throughout ITEC23, not just facts, but how my thinking has grown. I want it to show that I understand the real-world impact of technology on people, and that I'm serious about being a responsible IT professional going forward.
       </p>
     </div>
 
     <div class="obj-grid" style="margin-top: 32px;">
       <div class="obj-card">
-        <div class="obj-card-icon">🎯</div>
-        <h3>Demonstrate Critical Thinking</h3>
-        <p>Apply established ethical theories — Deontology, Virtue Ethics, Utilitarianism — to real-world IT incidents in a structured and reasoned manner.</p>
+        <h3>Think Critically</h3>
+        <p>Use what I've learned about ethics like Deontology, Virtue Ethics, and Utilitarianism, to look at real situations and think them through carefully, not just react.</p>
       </div>
       <div class="obj-card">
-        <div class="obj-card-icon">🔍</div>
-        <h3>Analyze Real-World Cases</h3>
-        <p>Examine an actual cybersecurity or digital ethics incident in depth, identifying stakeholders, harms, and systemic failures that enable such events.</p>
+        <h3>Study a Real Case</h3>
+        <p>Look at an actual incident that happened in the real world, understand what went wrong, who was affected, and what could have been done differently.</p>
       </div>
       <div class="obj-card">
-        <div class="obj-card-icon">🌱</div>
-        <h3>Document Personal Growth</h3>
-        <p>Reflect authentically on how this course has shifted my understanding of professional responsibility and the power that comes with technical expertise.</p>
+        <h3>Reflect on My Growth</h3>
+        <p>Be honest about how this course changed the way I think. About technology, about my future career, and about my responsibility to the people around me.</p>
       </div>
       <div class="obj-card">
-        <div class="obj-card-icon">📜</div>
-        <h3>Articulate a Professional Pledge</h3>
-        <p>Create a personalized ethical oath that I can hold myself accountable to throughout my career in information technology.</p>
+        <h3>Make a Personal Pledge</h3>
+        <p>Write down a set of values I actually believe in and want to live by as an IT professional. Not just something that sounds good on paper.</p>
       </div>
     </div>
   </section>
@@ -1083,37 +1125,39 @@
     <div class="reflection-layout">
       <div class="prose">
         <p>
-          Before ITEC 23, I understood ethics largely as rules to follow — legal compliance, terms of service, institutional policy. What the course dismantled was my comfortable assumption that following the law was the same as acting ethically. The most transformative case we examined was the phenomenon of ransomware — not its technical mechanics, but its moral anatomy. I had to sit with the uncomfortable reality that many of the developers behind ransomware tools began as legitimate security researchers. The line between a penetration tester probing a client's defenses and an attacker encrypting hospital files is not always a technical line. It is, fundamentally, an ethical one.
+          Before this course, I thought ethics is just meant following the rules. ITEC23 showed me that's not nearly enough. One of the things I took away from this subject is that, just because something is allowed doesn't mean it's right. The subject talked about how computer professionals have a special kind of responsibility. We can either do good or to cause harm. I think it is important to feel that hardship as it keeps a person from being honest.
         </p>
         <p>
-          The ethical dilemma that affected me most deeply was the trolley-problem dimension of cybersecurity disclosure. When a researcher discovers a zero-day vulnerability in widely used software, who do they tell first, and when? Notifying the vendor quietly gives them time to patch — but what about the days, weeks, or months of exposure in between? Notifying the public immediately protects awareness but may arm malicious actors before a fix exists. I had no clean answer, but engaging with deontological reasoning (the duty to disclose harm regardless of consequences) and utilitarian calculus (what course of action minimizes total suffering?) gave me a framework for approaching such dilemmas without paralysis. I learned that the absence of a perfect answer does not excuse the absence of a principled one.
+          <p>A years ago the PhilHealth hack really shook me. It was not some tech news story. Hackers actually broke in. They stole the info of millions of people. They held it for ransom. The government said no to paying the ransom. So all that private data ended up online.</p>
+          <p>It made me think. Even if you do nothing your private life can still be exposed. This can happen because of someone Mistake. I started wondering. Who is to blame for the PhilHealth hack? The hackers are clearly to blame.. What about the people who were supposed to protect the data at PhilHealth? Keeping people safe is not about fixing a problem after it happens. If the people in charge at PhilHealth had built a system from the start millions of people wouldn't have had their lives messed up.</p>
+          <p>The PhilHealth hack is a reminder. Taking shortcuts with security can hurt people in life. The PhilHealth hack showed me that security is important. We should not take shortcuts with it. The people, at PhilHealth should have done a job. They should have kept the data safe.</p> 
         </p>
         <p>
-          Looking forward, I intend to carry these lessons into my professional life by cultivating what Aristotle would call practical wisdom — the habit of pausing before action to ask not just "can I do this?" but "should I?" I will advocate for privacy by design in systems I build, support responsible disclosure practices in any security work I undertake, and refuse to participate in projects that weaponize technology against vulnerable individuals. Ethics, I have come to understand, is not a subject studied once and filed away. It is a practice, renewed daily in every professional decision, large or small.
+          Going forward, I want to carry these lessons into everything I build and every team I work with. I want to ask "should I?" before I ask "can I?" I want to speak up if something feels wrong. And I want to keep learning because technology changes fast, and new tools bring new questions that we don't have all the answers to yet. Ethics isn't a subject you study once and forget. It's something you practice, every single day.
         </p>
 
         <div class="pull-quote" style="border-color: var(--rust);">
-          <blockquote style="color: var(--rust);">"Ethics is not a constraint on good engineering — it is a prerequisite for it."</blockquote>
-          <cite>Course Reflection</cite>
+          <blockquote style="color: var(--rust);">"Doing the right thing is still the right thing, even when nobody is watching."</blockquote>
+          <cite>Personal Takeaway</cite>
         </div>
       </div>
 
       <div class="reflection-aside">
         <div class="aside-card">
-          <div class="aside-card-label">Key Lesson #1</div>
-          <p>Legality and ethics are not synonyms. An action can be technically legal and still cause profound harm to individuals or communities.</p>
+          <div class="aside-card-label">From Chapter 2</div>
+          <p>Legal and ethical are not always the same thing. IT professionals can do good or cause harm. The Code of Ethics exists to remind us to always choose good.</p>
         </div>
         <div class="aside-card">
-          <div class="aside-card-label">Key Lesson #2</div>
-          <p>Responsible disclosure is one of the most ethically complex duties an IT professional faces — requiring balance between transparency, harm reduction, and timeliness.</p>
+          <div class="aside-card-label">From Chapter 4</div>
+          <p>Real incidents like the Facebook and Cambridge Analytica scandal showed me that privacy is not just a legal requirement. It is something we owe to every person whose information we handle.</p>
         </div>
         <div class="aside-card">
-          <div class="aside-card-label">Key Lesson #3</div>
-          <p>Virtue Ethics reminds us that character matters more than any single decision — consistent, principled behavior builds the integrity that technology requires.</p>
+          <div class="aside-card-label">What I Learned</div>
+          <p>There aren't always clear right answers in ethical situations. What matters is that you think it through honestly and make the most careful choice you can.</p>
         </div>
         <div class="aside-card" style="background: var(--forest);">
-          <div class="aside-card-label" style="color: rgba(245,240,232,0.6);">Guiding Insight</div>
-          <p>The most dangerous IT professional is not the malicious hacker — it is the well-meaning one who never asks whether they <em>should</em>.</p>
+          <div class="aside-card-label" style="color: rgba(245,240,232,0.6);">Something That Stuck With Me</div>
+          <p>The most dangerous person in tech isn't always someone with bad intentions. It is someone with good intentions who never stops to ask if what they're doing is right.</p>
         </div>
       </div>
     </div>
@@ -1131,116 +1175,86 @@
     </div>
 
     <!-- Incident Banner -->
-    <div class="incident-banner">
+    <div class="incident-banner" style="grid-template-columns: 1fr;">
       <div>
-        <div class="incident-sub">Case Study — Data Privacy Scandal</div>
-        <div class="incident-title">Facebook & Cambridge Analytica</div>
-        <p class="incident-desc">One of the most consequential data privacy scandals in history — in which the personal data of up to 87 million Facebook users was harvested without meaningful consent and weaponized to influence democratic elections worldwide.</p>
-      </div>
-      <div class="incident-badge">
-        <span class="incident-badge-icon">📊</span>
-        <span class="incident-badge-label">Exposed 2018 · Global Impact</span>
+        <div class="incident-sub">Case Study: Data Privacy Scandal</div>
+        <div class="incident-title">Facebook and Cambridge Analytica</div>
+        <p class="incident-desc">One of the biggest privacy scandals in recent history. About 87 million Facebook users had their personal information collected and used without their knowledge to influence elections around the world.</p>
       </div>
     </div>
 
     <!-- 4.1 Summary -->
     <div class="case-block">
-      <span class="case-block-label slate">4.1 — Incident Summary</span>
-      <h3>What Happened</h3>
-      <p>In 2013, Cambridge University researcher Aleksandr Kogan developed a Facebook quiz app called "thisisyourdigitallife." While only around 270,000 people installed the app and consented to data collection, Facebook's API at the time allowed the app to also harvest data from each user's entire friend network — without those friends' knowledge or consent. This resulted in the personal data of approximately 87 million Facebook users being collected.</p>
-      <p style="margin-top:14px;">Kogan passed this data to Cambridge Analytica, a British political consulting firm. Cambridge Analytica then used the data to build detailed psychographic profiles of American voters, which were sold to political campaigns — most notably the 2016 U.S. presidential campaign of Donald Trump and the Brexit "Leave" campaign in the United Kingdom. The scandal broke publicly in March 2018 through reporting by The Guardian and The New York Times, triggering global regulatory scrutiny, a U.S. Senate hearing where Mark Zuckerberg testified, and a record $5 billion FTC fine against Facebook.</p>
-
-      <div class="screenshot-mockup" style="margin-top:28px;">
-        <div class="mockup-bar">
-          <div class="mockup-dot red"></div>
-          <div class="mockup-dot yellow"></div>
-          <div class="mockup-dot green"></div>
-          <div class="mockup-url">developers.facebook.com > graph-api > v2.0 > changelog</div>
-        </div>
-        <div class="mockup-content">
-          <div class="code-line"><span class="code-ln">1</span><span class="code-cmt">// Facebook Graph API — Friend Data Access (Pre-2015, Simulated)</span></div>
-          <div class="code-line"><span class="code-ln">2</span><span class="code-text">&nbsp;</span></div>
-          <div class="code-line"><span class="code-ln">3</span><span class="code-key">GET</span><span class="code-text"> /me/friends?fields=</span><span class="code-str">id,name,location,likes,religion,politics</span></div>
-          <div class="code-line"><span class="code-ln">4</span><span class="code-text">&nbsp;</span></div>
-          <div class="code-line"><span class="code-ln">5</span><span class="code-cmt">// Response: data of ALL friends, not just the consenting user</span></div>
-          <div class="code-line"><span class="code-ln">6</span><span class="code-key">records_harvested</span><span class="code-text">: </span><span style="color:#ff8888">87,000,000</span></div>
-          <div class="code-line"><span class="code-ln">7</span><span class="code-key">user_consent_obtained</span><span class="code-text">: </span><span style="color:#ff4444">false</span><span class="code-cmt">  // for ~86.73M of those records</span></div>
-          <div class="code-line"><span class="code-ln">8</span><span class="code-key">data_sold_to</span><span class="code-text">: </span><span class="code-str">"Cambridge Analytica Ltd."</span></div>
-          <div class="code-line"><span class="code-ln">9</span><span class="code-key">purpose</span><span class="code-text">: </span><span class="code-str">"psychographic voter profiling"</span></div>
-          <div class="code-line"><span class="code-ln">10</span><span class="code-text">&nbsp;</span></div>
-          <div class="code-line"><span class="code-ln">11</span><span class="code-cmt">// API permission closed April 2015 — 2 years after data harvested</span></div>
-        </div>
-      </div>
+      <span class="case-block-label slate">4.1 What Happened</span>
+      <h3>The Story</h3>
+      <p>In 2013, a researcher named Aleksandr Kogan made a simple personality quiz on Facebook. Around 270,000 people took the quiz and agreed to share their data. The problem was that Facebook's system at the time also gave the app access to all of those users' friends. Those friends never agreed to anything. In the end, data from about 87 million people was collected without anyone telling them.</p>
+      <p style="margin-top:14px;">Kogan then passed all of that data to a company called Cambridge Analytica. They used it to build detailed profiles of voters to figure out what kinds of messages each person would respond to. They then sold those profiles to political campaigns. Their biggest clients were the Trump presidential campaign in 2016 and the Brexit "Leave" campaign in the UK. The story became public in March 2018. Facebook's CEO Mark Zuckerberg was called to explain himself before the US Senate, and Facebook was fined 5 billion dollars by regulators.</p>
 
       <!-- Timeline visual -->
-      <div style="margin-top:32px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+      <div class="timeline-grid" style="margin-top:32px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
         <div style="background:var(--cream);border-radius:8px;padding:20px 16px;border-top:3px solid var(--slate);text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--slate);">2013</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">Kogan's app harvests data from 87M Facebook users via friend API</div>
-        </div>
-        <div style="background:var(--cream);border-radius:8px;padding:20px 16px;border-top:3px solid var(--gold);text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--gold);">2016</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">Data used to target voters in U.S. Presidential Election & Brexit referendum</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--slate);">2013</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">Kogan's quiz app secretly collects data from 87 million Facebook users and their friends</div>
         </div>
         <div style="background:var(--cream);border-radius:8px;padding:20px 16px;border-top:3px solid var(--rust);text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--rust);">2018</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">Scandal breaks publicly; Zuckerberg testifies before U.S. Senate</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--rust);">2016</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">The data is used to target voters during the US Presidential Election and the Brexit vote</div>
+        </div>
+        <div style="background:var(--cream);border-radius:8px;padding:20px 16px;border-top:3px solid var(--gold);text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--gold);">2018</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">The scandal goes public. Zuckerberg is called to testify before the US Senate</div>
         </div>
         <div style="background:var(--cream);border-radius:8px;padding:20px 16px;border-top:3px solid var(--forest);text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--forest);">$5B</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">FTC fine against Facebook — largest ever data-privacy penalty at the time</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--forest);">$5B</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">Facebook is fined $5 billion, the biggest privacy fine ever given at the time</div>
         </div>
       </div>
     </div>
 
     <!-- 4.2 Ethical Issues -->
     <div class="case-block">
-      <span class="case-block-label rust">4.2 — Ethical Issues Identified</span>
-      <h3>The Moral Dimensions</h3>
+      <span class="case-block-label rust">4.2 The Ethical Problems</span>
+      <h3>What Was Wrong About It</h3>
       <ul>
-        <li><strong>Violation of Informed Consent:</strong> The 87 million people whose data was harvested never agreed to have their information used for political profiling. Consent obtained from a small subset of users was silently extended to their entire social graph — a fundamental betrayal of the consent principle that underlies all ethical data practice.</li>
-        <li><strong>Manipulation of Democratic Processes:</strong> Using psychological profiles built from private data to target and influence voters strikes at the heart of democratic autonomy. Citizens were subjected to precisely tailored political messaging without any awareness that they were being profiled.</li>
-        <li><strong>Failure of Platform Stewardship:</strong> Facebook had the technical means and the contractual authority to prevent third-party misuse of user data. Its failure to enforce its own policies — and to audit what data Cambridge Analytica had retained after a 2015 deletion request — constitutes a serious breach of fiduciary duty to its users.</li>
-        <li><strong>Commodification of Personal Identity:</strong> People's political beliefs, religious views, and relationship status — deeply personal attributes — were reduced to data points bought and sold for commercial profit, without those individuals receiving any benefit or even acknowledgment.</li>
-        <li><strong>Transparency Deficit:</strong> Facebook delayed informing affected users for years after learning of the breach internally. This lack of transparency amplified harm and eroded public trust in digital platforms as institutions capable of responsible self-governance.</li>
+        <li><strong>People never agreed to it.</strong> The 87 million people whose data was taken never said yes. Only a small group agreed to the quiz. The data of all their friends was swept up too. That is a serious violation of trust.</li>
+        <li><strong>It was used to influence how people voted.</strong> Using someone's private information to push specific political messages at them without them knowing is a form of manipulation. People deserve to make up their own minds without being secretly pushed in a direction.</li>
+        <li><strong>Facebook did not protect its users.</strong> Facebook had the ability to stop this kind of data sharing. They had rules in place but did not follow through on them. That is a failure of responsibility.</li>
+        <li><strong>Personal beliefs were treated like a product.</strong> Things like your political opinions, religion, and relationships were turned into data that got bought and sold for profit. That is a violation of something deeply personal.</li>
+        <li><strong>Facebook stayed quiet for years.</strong> They knew about this long before it became public, and they did not tell users. That silence made everything worse and broke people's trust even further.</li>
       </ul>
     </div>
 
     <!-- 4.3 Ethical Theories -->
     <div class="case-block">
-      <span class="case-block-label gold">4.3 — Ethical Theories Applied</span>
-      <h3>Analyzing Through Ethical Frameworks</h3>
+      <span class="case-block-label gold">4.3 Viewing It Through Ethical Theories</span>
+      <h3>What Different Ethical Frameworks Say</h3>
 
       <div class="theory-grid" style="margin-top: 20px;">
         <div class="theory-card deontology">
-          <div class="theory-icon">⚖️</div>
-          <div class="theory-name">Deontological Ethics</div>
-          <p>Kant's categorical imperative demands that we never treat persons merely as means to an end. Facebook and Cambridge Analytica did exactly this — 87 million individuals were converted into data instruments for profit and political manipulation, their autonomy disregarded entirely. A universalizable rule "companies may harvest and sell user data without consent" would destroy the social contract on which digital platforms depend.</p>
+          <div class="theory-name">Deontology (Duty-Based Ethics)</div>
+          <p>This approach says some actions are just wrong no matter the outcome. Using millions of people's data without asking them is wrong because it treats people as tools instead of as humans who deserve respect. A simple rule to follow: always ask for permission before using someone's personal information. If everyone followed that rule, this scandal would never have happened.</p>
         </div>
         <div class="theory-card virtue">
-          <div class="theory-icon">🏛️</div>
-          <div class="theory-name">Virtue Ethics</div>
-          <p>Aristotle's framework centers on character. A virtuous data steward would embody honesty, transparency, and justice — disclosing clearly what data is collected and how it is used. Facebook's culture of "move fast and break things" reflects the opposite: an institutional character defined by opacity, expedience, and the subordination of users' interests to growth metrics. The scandal is, at root, a failure of organizational virtue.</p>
+          <div class="theory-name">Virtue Ethics (Character-Based)</div>
+          <p>This approach focuses on who you are and not just what you do. An honest and caring company would have been upfront with users about how their data was being used. Facebook's attitude of moving fast and figuring things out later shows a culture that did not value honesty or fairness. That is a character problem, not just a policy problem.</p>
         </div>
         <div class="theory-card utilitarian">
-          <div class="theory-icon">📊</div>
-          <div class="theory-name">Utilitarian Ethics</div>
-          <p>Even granting that Cambridge Analytica's clients derived political benefit, the aggregate harm is staggering: millions of people's autonomy compromised, democratic institutions undermined, global trust in digital platforms shattered, and a regulatory backlash (GDPR, CCPA) that imposed sweeping costs on the entire industry. The total harm vastly outweighs any narrow gain, making the consequentialist case against the scandal equally damning.</p>
+          <div class="theory-name">Utilitarianism (What is Best for the Most)</div>
+          <p>This approach asks: did this help more people than it hurt? The answer is clearly no. Millions of people lost control of their private information. Public trust in social media dropped. Governments had to step in with stricter laws that affected the whole industry. Whatever political benefit came from it was far outweighed by the damage it caused.</p>
         </div>
       </div>
     </div>
 
     <!-- 4.4 Solutions -->
     <div class="case-block">
-      <span class="case-block-label forest">4.4 — Proposed Solutions & Interventions</span>
-      <h3>Ethical Pathways Forward</h3>
+      <span class="case-block-label forest">4.4 How We Can Prevent This</span>
+      <h3>What Should Be Done Differently</h3>
       <ul>
-        <li><strong>Granular, Meaningful Consent:</strong> Platforms must obtain explicit, informed consent for every specific use of personal data — not buried in a 30-page terms of service. Users should be able to see, edit, and revoke data permissions at any time through a clear, accessible dashboard.</li>
-        <li><strong>Data Minimization Principles:</strong> IT professionals should design systems that collect only the data strictly necessary for the stated purpose. Harvesting a user's friend network to improve a quiz app has no legitimate basis and should be technically prevented, not just contractually prohibited.</li>
-        <li><strong>Third-Party Auditing:</strong> Platforms that grant API access to developers should conduct regular, independent audits to verify that developer data practices comply with stated policies — and should revoke access and notify users immediately upon discovery of violations.</li>
-        <li><strong>Strong Regulatory Enforcement:</strong> The EU's General Data Protection Regulation (GDPR), enacted partly in response to this scandal, provides a model: mandatory breach notification, the right to erasure, and fines proportional to global revenue rather than fixed amounts that large corporations can absorb as a cost of business.</li>
-        <li><strong>Algorithmic Transparency:</strong> When data is used to make decisions that affect individuals — including political targeting — those individuals have a right to know that profiling is occurring. Mandatory disclosure of targeted political advertising (as now required in several jurisdictions) is a minimum standard, not a ceiling.</li>
-        <li><strong>Ethics Education for Developers:</strong> The engineers who built Facebook's friend-data API likely never considered the downstream harms of their design choices. Embedding ethical impact assessment into software development practice — as a standard step alongside security review — would help prevent future platforms from building the same vulnerabilities by default.</li>
+        <li><strong>Make consent clear and simple.</strong> Apps and platforms should ask users in plain language what data they are collecting and exactly how it will be used. Not buried in fine print. And users should be able to change or take back that permission at any time.</li>
+        <li><strong>Only collect what you actually need.</strong> If an app just needs your name for a quiz, it does not need your location, religion, and list of friends too. Collecting extra data just in case is how these problems start.</li>
+        <li><strong>Check on the developers using your platform.</strong> Facebook gave outside developers access to huge amounts of user data and did not check what they were doing with it. Platforms need to actually follow up and make sure their rules are being followed.</li>
+        <li><strong>Stronger laws with real consequences.</strong> The EU's GDPR law came partly from this scandal. It requires companies to tell users when their data is affected and gives people the right to ask for their data to be deleted. More countries need rules like this.</li>
+        <li><strong>Teach ethics to developers.</strong> The people who built Facebook's data-sharing tools probably never thought about how they could be misused. Teaching IT students like us to think about the human impact of what we build is one of the most important things we can do.</li>
       </ul>
     </div>
   </section>
@@ -1257,54 +1271,54 @@
     </div>
 
     <div class="prose" style="margin-bottom: 40px;">
-      <p>The following oath represents my personal commitment to ethical practice as an IT professional. It is not a set of constraints imposed from outside — it is a statement of who I intend to be.</p>
+      <p>This is my personal promise to myself and to the people who will one day be affected by the systems I build. It is not a list of rules someone gave me. It is what I actually believe.</p>
     </div>
 
     <div class="pledge-wrap">
-      <div class="pledge-intro">I, as a future Information Technology professional, solemnly pledge the following:</div>
-      <div class="pledge-title">The IT Professional's Oath</div>
+      <div class="pledge-intro">I, as a future Information Technology professional, make the following pledge:</div>
+      <div class="pledge-title">My Personal IT Ethics Pledge</div>
 
       <ul class="pledge-list">
         <li class="pledge-item">
           <div class="pledge-num">I.</div>
           <div class="pledge-text">
-            <h4>I will protect the privacy and data of every person my work touches.</h4>
-            <p>Data is not an abstract resource — it is a trace of human life. I will treat every record, credential, and personal detail entrusted to systems I build or maintain as if it belonged to someone I love. I will apply privacy by design, collect only what is necessary, and advocate against surveillance architectures that reduce people to data points.</p>
+            <h4>I will protect people's private information like it matters, because it does.</h4>
+            <p>Behind every piece of data is a real person. I will treat any information people trust me with carefully and respectfully. I won't collect what I don't need, and I won't share what wasn't meant to be shared.</p>
           </div>
         </li>
         <li class="pledge-item">
           <div class="pledge-num">II.</div>
           <div class="pledge-text">
-            <h4>I will never weaponize my technical skills against vulnerable individuals.</h4>
-            <p>Technical knowledge is power, and power misused causes real harm. I will not participate in sextortion, cyber harassment, unauthorized access, or any use of technology intended to coerce, humiliate, or harm individuals — regardless of whether such acts are prosecutable under current law.</p>
+            <h4>I will never use my skills to hurt or take advantage of people.</h4>
+            <p>Knowing how to build technology is a kind of power. I promise not to use that power to bully, harass, stalk, or manipulate anyone, online or off. No project is worth doing if it causes harm to a real person.</p>
           </div>
         </li>
         <li class="pledge-item">
           <div class="pledge-num">III.</div>
           <div class="pledge-text">
-            <h4>I will practice and advocate for responsible disclosure.</h4>
-            <p>When I discover vulnerabilities, I will follow responsible disclosure practices — notifying affected parties with adequate time to patch, while ultimately prioritizing the safety of users over my own convenience or career advancement. I will not hoard zero-days for competitive or financial advantage.</p>
+            <h4>I will be honest when I find something that puts people at risk.</h4>
+            <p>If I ever find a flaw or weakness in a system, I will handle it the right way, by telling the right people so it can be fixed, rather than hiding it or using it for personal gain. People's safety comes first.</p>
           </div>
         </li>
         <li class="pledge-item">
           <div class="pledge-num">IV.</div>
           <div class="pledge-text">
-            <h4>I will be honest about what my systems can and cannot do.</h4>
-            <p>Overpromising capabilities — especially in security-sensitive domains — creates false assurance that kills. I will be transparent with clients, employers, and the public about the limitations of any system I build, and I will resist pressure to ship something I know is dangerously insecure.</p>
+            <h4>I will be upfront about what I can and can't do.</h4>
+            <p>I won't oversell my work or promise things I can't deliver, especially when security is involved. If something isn't safe to launch, I'll say so, even if there's pressure not to.</p>
           </div>
         </li>
         <li class="pledge-item">
           <div class="pledge-num">V.</div>
           <div class="pledge-text">
-            <h4>I will continuously educate myself on the evolving ethical landscape of technology.</h4>
-            <p>The digital world changes faster than any curriculum can capture. Emerging technologies — AI, biometrics, autonomous systems — raise new ethical questions every year. I commit to treating ethical learning as a professional obligation, not a one-time box to check, and to bring what I learn into every team and organization I join.</p>
+            <h4>I will keep learning, because technology keeps changing.</h4>
+            <p>New tools like AI and biometrics bring new questions that we don't have all the answers to yet. I want to stay curious and keep asking what the right thing to do is, not just when I graduate but throughout my whole career.</p>
           </div>
         </li>
         <li class="pledge-item">
           <div class="pledge-num">VI.</div>
           <div class="pledge-text">
-            <h4>I will speak up when I witness unethical practice, even when it is costly.</h4>
-            <p>Silence in the face of wrongdoing is its own form of participation. Whether it is a manager demanding impossible security shortcuts, a client requesting a system designed for surveillance, or a colleague exfiltrating data — I will raise concerns through proper channels, and if those fail, through whatever ethical alternatives exist. Moral courage is not optional for professionals who hold public trust.</p>
+            <h4>I will speak up when something feels wrong, even when it's hard.</h4>
+            <p>Staying quiet when you see something bad happening is also a choice. If a project is heading in a harmful direction, I want to be someone who says something, respectfully but clearly. That's what I think a good IT professional looks like.</p>
           </div>
         </li>
       </ul>
@@ -1312,15 +1326,15 @@
       <div class="pledge-signature">
         <div>
           <div class="signature-line"></div>
-          <div class="signature-label">Signature of Pledge</div>
+          <div class="signature-label">Razel L. Camitan</div>
         </div>
         <div>
           <div class="signature-line"></div>
-          <div class="signature-label">Date</div>
+          <div class="signature-label">BSIT - 3A</div>
         </div>
         <div>
           <div class="signature-line"></div>
-          <div class="signature-label">Student Name</div>
+          <div class="signature-label">May 12, 2026</div>
         </div>
       </div>
     </div>
@@ -1328,8 +1342,8 @@
 
   <!-- FOOTER -->
   <footer class="footer">
-    <div class="footer-text">ITEC 23 · Individual Digital Portfolio · AY 2024–2025</div>
-    <div class="footer-tag">Ethics is not a subject — it is a practice.</div>
+    <div class="footer-text">ITEC23 · Individual Digital Portfolio · 2026</div>
+    <div class="footer-tag">Ethics is not a subject. It is a practice.</div>
   </footer>
 </main>
 
@@ -1337,6 +1351,28 @@
 <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
+  // Hamburger menu (mobile)
+  const hamburger = document.getElementById('hamburger');
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('mobileOverlay');
+
+  function toggleMenu(open) {
+    sidebar.classList.toggle('open', open);
+    hamburger.classList.toggle('open', open);
+    overlay.classList.toggle('show', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  hamburger.addEventListener('click', () => toggleMenu(!sidebar.classList.contains('open')));
+  overlay.addEventListener('click', () => toggleMenu(false));
+
+  // Close menu when a TOC link is tapped on mobile
+  document.querySelectorAll('.toc-link').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 768) toggleMenu(false);
+    });
+  });
+
   // Reading progress bar
   window.addEventListener('scroll', () => {
     const main = document.querySelector('.main');
@@ -1386,17 +1422,7 @@
     });
   });
 
-  // Ransomware countdown (visual/educational only)
-  let h = 71, m = 58, s = 42;
-  setInterval(() => {
-    s--;
-    if (s < 0) { s = 59; m--; }
-    if (m < 0) { m = 59; h--; }
-    if (h < 0) { h = 0; m = 0; s = 0; }
-    document.getElementById('hours').textContent = String(h).padStart(2,'0');
-    document.getElementById('mins').textContent = String(m).padStart(2,'0');
-    document.getElementById('secs').textContent = String(s).padStart(2,'0');
-  }, 1000);
+
 </script>
 </body>
 </html>
