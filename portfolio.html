@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ITEC 23 Digital Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f0e8;
+    --cream: #ede6d6;
+    --rust: #b94a2c;
+    --gold: #c9922a;
+    --forest: #2a5c45;
+    --slate: #3d4a5c;
+    --muted: #7a7060;
+    --rule: rgba(15,14,12,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: .5;
+  }
+
+  /* ── SIDEBAR NAV ── */
+  .sidebar {
+    position: fixed; top: 0; left: 0;
+    width: 260px; height: 100vh;
+    background: var(--ink);
+    padding: 48px 32px;
+    display: flex; flex-direction: column;
+    z-index: 100;
+    overflow-y: hidden;
+  }
+
+  .sidebar-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .sidebar-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--paper);
+    line-height: 1.3;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .toc-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .toc-list { list-style: none; }
+  .toc-list li { margin-bottom: 2px; }
+
+  .toc-list a {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: rgba(245,240,232,0.65);
+    text-decoration: none;
+    font-size: 13px;
+    font-family: 'Source Serif 4', serif;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+  }
+
+  .toc-list a:hover,
+  .toc-list a.active {
+    color: var(--paper);
+    background: rgba(255,255,255,0.06);
+    border-left-color: var(--rust);
+    padding-left: 16px;
+  }
+
+  .toc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--rust);
+    flex-shrink: 0;
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,240,232,0.3);
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    margin-left: 260px;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    padding: 100px 80px 80px;
+    background: var(--ink);
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 80% 50%, rgba(185,74,44,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 80% at 10% 80%, rgba(42,92,69,0.2) 0%, transparent 60%);
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(rgba(245,240,232,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,240,232,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 24px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--rust);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 900;
+    color: var(--paper);
+    line-height: 1.05;
+    position: relative;
+    max-width: 700px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 40px;
+    margin-top: 48px;
+    position: relative;
+  }
+
+  .hero-meta-item {
+    border-left: 2px solid var(--rust);
+    padding-left: 16px;
+  }
+
+  .hero-meta-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .hero-meta-value {
+    font-size: 14px;
+    color: var(--paper);
+    font-weight: 300;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 80px 80px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section:nth-child(odd) { background: var(--paper); }
+  .section:nth-child(even) { background: var(--cream); }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .section-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(15,14,12,0.07);
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: -8px;
+    user-select: none;
+  }
+
+  .section-title-group { flex: 1; }
+
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 3vw, 36px);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--rust), var(--gold));
+    margin: 16px 0 0;
+    border-radius: 2px;
+  }
+
+  /* ── PROSE ── */
+  .prose p {
+    max-width: 680px;
+    color: #2d2a24;
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+
+  .prose p:last-child { margin-bottom: 0; }
+
+  /* ── PULL QUOTE ── */
+  .pull-quote {
+    border-left: 4px solid var(--forest);
+    background: rgba(42,92,69,0.06);
+    padding: 24px 32px;
+    margin: 40px 0;
+    max-width: 620px;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .pull-quote blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--forest);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .pull-quote cite {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ── OBJECTIVES CARDS ── */
+  .obj-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 8px;
+  }
+
+  .obj-card {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 32px;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .obj-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 80px; height: 80px;
+    background: radial-gradient(ellipse at top right, rgba(185,74,44,0.4), transparent 60%);
+  }
+
+  .obj-card-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  .obj-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--gold);
+  }
+
+  .obj-card p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(245,240,232,0.75);
+  }
+
+  /* ── CASE STUDY ── */
+  .case-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .case-block {
+    padding: 32px 40px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    margin-bottom: 24px;
+    background: white;
+    position: relative;
+  }
+
+  .case-block-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: white;
+    background: var(--slate);
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+  }
+
+  .case-block-label.rust { background: var(--rust); }
+  .case-block-label.gold { background: var(--gold); color: var(--ink); }
+  .case-block-label.forest { background: var(--forest); }
+  .case-block-label.slate { background: var(--slate); }
+
+  .case-block h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--ink);
+  }
+
+  .case-block p, .case-block li {
+    font-size: 15px;
+    color: #3a3630;
+    line-height: 1.7;
+    max-width: 640px;
+  }
+
+  .case-block ul {
+    padding-left: 20px;
+    margin-top: 8px;
+  }
+
+  .case-block li { margin-bottom: 6px; }
+
+  /* ── INCIDENT BANNER ── */
+  .incident-banner {
+    background: linear-gradient(135deg, var(--ink) 0%, #1e1008 100%);
+    border-radius: 12px;
+    padding: 40px 48px;
+    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .incident-banner::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(185,74,44,0.3), transparent 70%);
+  }
+
+  .incident-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--paper);
+    margin-bottom: 8px;
+  }
+
+  .incident-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--rust);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .incident-desc {
+    font-size: 14px;
+    color: rgba(245,240,232,0.65);
+    max-width: 500px;
+  }
+
+  .incident-badge {
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .incident-badge-icon {
+    font-size: 52px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .incident-badge-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+  }
+
+  /* ── ETHICS THEORIES ── */
+  .theory-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 8px;
+  }
+
+  .theory-card {
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 28px 24px;
+    background: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .theory-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .theory-card.deontology::after { background: var(--slate); }
+  .theory-card.virtue::after { background: var(--forest); }
+  .theory-card.utilitarian::after { background: var(--rust); }
+
+  .theory-icon { font-size: 28px; margin-bottom: 14px; }
+
+  .theory-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+
+  .theory-card p {
+    font-size: 13.5px;
+    color: #4a4640;
+    line-height: 1.65;
+  }
+
+  /* ── PLEDGE ── */
+  .pledge-wrap {
+    background: var(--ink);
+    border-radius: 12px;
+    padding: 56px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pledge-wrap::before {
+    content: '"';
+    position: absolute;
+    top: -20px; left: 40px;
+    font-family: 'Playfair Display', serif;
+    font-size: 240px;
+    color: rgba(201,146,42,0.08);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .pledge-intro {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: rgba(245,240,232,0.5);
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  .pledge-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--gold);
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .pledge-list {
+    list-style: none;
+    display: grid;
+    gap: 24px;
+  }
+
+  .pledge-item {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 20px;
+    align-items: start;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+
+  .pledge-item:last-child { border-bottom: none; }
+
+  .pledge-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--rust);
+    opacity: 0.6;
+    line-height: 1;
+    margin-top: 4px;
+  }
+
+  .pledge-text h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--paper);
+    margin-bottom: 6px;
+  }
+
+  .pledge-text p {
+    font-size: 13.5px;
+    color: rgba(245,240,232,0.6);
+    line-height: 1.65;
+  }
+
+  .pledge-signature {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .signature-line {
+    flex: 1;
+    border-bottom: 2px solid rgba(245,240,232,0.2);
+    position: relative;
+  }
+
+  .signature-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.3);
+    margin-top: 8px;
+  }
+
+  /* ── REFLECTION LAYOUT ── */
+  .reflection-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .reflection-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: sticky;
+    top: 40px;
+  }
+
+  .aside-card {
+    background: var(--ink);
+    border-radius: 8px;
+    padding: 24px;
+    color: var(--paper);
+  }
+
+  .aside-card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .aside-card p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(245,240,232,0.7);
+  }
+
+  /* ── SCREENSHOT MOCKUP ── */
+  .screenshot-mockup {
+    background: #1a1a2e;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    margin: 24px 0;
+  }
+
+  .mockup-bar {
+    background: #12121f;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mockup-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .mockup-dot.red { background: #ff5f57; }
+  .mockup-dot.yellow { background: #febc2e; }
+  .mockup-dot.green { background: #28c840; }
+
+  .mockup-url {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+    padding: 4px 12px;
+    margin-left: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .mockup-content {
+    padding: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+
+  .code-line { display: flex; gap: 16px; }
+  .code-ln { color: rgba(255,255,255,0.2); user-select: none; width: 20px; text-align: right; }
+  .code-text { color: #a8b5c8; }
+  .code-key { color: #f97583; }
+  .code-val { color: #9ecbff; }
+  .code-str { color: #9db891; }
+  .code-cmt { color: rgba(255,255,255,0.25); font-style: italic; }
+
+  /* ── RANSOMWARE VISUAL ── */
+  .ransomware-visual {
+    background: #0d0d0d;
+    border: 1px solid #ff3333;
+    border-radius: 8px;
+    padding: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ransomware-visual::before {
+    content: '⚠ RANSOMWARE SIMULATION — EDUCATIONAL PURPOSES ONLY';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    background: #ff3333;
+    color: white;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 4px 16px;
+    text-align: center;
+  }
+
+  .rv-title {
+    font-size: 20px;
+    color: #ff4444;
+    font-weight: 700;
+    margin: 24px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 20px rgba(255,68,68,0.5);
+  }
+
+  .rv-sub { font-size: 11px; color: #888; margin-bottom: 20px; }
+
+  .rv-demand {
+    background: rgba(255,68,68,0.1);
+    border: 1px solid rgba(255,68,68,0.3);
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .rv-demand p { font-size: 12px; color: #ccc; line-height: 1.8; }
+  .rv-demand strong { color: #ff8888; }
+
+  .rv-btc {
+    font-size: 13px;
+    color: #f7931a;
+    margin-top: 16px;
+    padding: 12px;
+    background: rgba(247,147,26,0.1);
+    border-radius: 4px;
+    word-break: break-all;
+  }
+
+  .rv-timer {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #ff4444;
+  }
+
+  .rv-timer-unit {
+    text-align: center;
+  }
+
+  .rv-timer-label {
+    font-size: 8px;
+    color: #666;
+    display: block;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── PROGRESS BARS ── */
+  .stat-grid {
+    display: grid;
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .stat-item-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .stat-bar {
+    height: 6px;
+    background: rgba(15,14,12,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .stat-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .stat-fill.rust { background: linear-gradient(90deg, var(--rust), #e06030); }
+  .stat-fill.gold { background: linear-gradient(90deg, var(--gold), #e8b040); }
+  .stat-fill.forest { background: linear-gradient(90deg, var(--forest), #3a7d60); }
+  .stat-fill.slate { background: linear-gradient(90deg, var(--slate), #5a6880); }
+
+  /* ── PROGRESS INDICATOR ── */
+  .reading-progress {
+    position: fixed;
+    top: 0; left: 260px; right: 0;
+    height: 3px;
+    background: rgba(15,14,12,0.1);
+    z-index: 200;
+  }
+
+  .reading-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--rust), var(--gold));
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--ink);
+    padding: 48px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(245,240,232,0.3);
+    letter-spacing: 0.1em;
+  }
+
+  .footer-tag {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  /* ── BACK TO TOP ── */
+  .back-to-top {
+    position: fixed;
+    bottom: 32px; right: 32px;
+    width: 44px; height: 44px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: all 0.3s;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+
+  .back-to-top.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .back-to-top:hover {
+    background: var(--rust);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1100px) {
+    .sidebar { width: 220px; padding: 40px 24px; }
+    .main { margin-left: 220px; }
+    .reading-progress { left: 220px; }
+    .hero, .section { padding-left: 48px; padding-right: 48px; }
+    .theory-grid { grid-template-columns: 1fr 1fr; }
+    .reflection-layout { grid-template-columns: 1fr; }
+    .reflection-aside { position: static; }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .reading-progress { left: 0; }
+    .hero, .section { padding: 48px 24px; }
+    .obj-grid { grid-template-columns: 1fr; }
+    .theory-grid { grid-template-columns: 1fr; }
+    .incident-banner { grid-template-columns: 1fr; }
+    .pledge-wrap { padding: 32px 24px; }
+    .footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="reading-progress">
+  <div class="reading-progress-fill" id="readingProgress"></div>
+</div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">ITEC 23 Portfolio</div>
+  <div class="sidebar-name">Social & Professional Issues in Information Technology</div>
+
+  <div class="toc-label">Table of Contents</div>
+  <ul class="toc-list">
+    <li><a href="#introduction" class="toc-link"><span class="toc-num">01</span> Introduction</a></li>
+    <li><a href="#objectives" class="toc-link"><span class="toc-num">02</span> Objectives</a></li>
+    <li><a href="#reflection" class="toc-link"><span class="toc-num">03</span> Reflection</a></li>
+    <li><a href="#casestudy" class="toc-link"><span class="toc-num">04</span> Case Study Analysis</a></li>
+    <li><a href="#pledge" class="toc-link"><span class="toc-num">05</span> Ethics Pledge</a></li>
+  </ul>
+
+  <div class="sidebar-footer">
+    AY 2024–2025 · Individual Portfolio<br>
+    ITEC 23 — Ethical Computing
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-tag">Individual Digital Portfolio</div>
+    <h1>Ethics in the<br><em>Digital Age</em></h1>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Subject</div>
+        <div class="hero-meta-value">ITEC 23</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Focus</div>
+        <div class="hero-meta-value">Social & Professional Issues in IT</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Level</div>
+        <div class="hero-meta-value">Undergraduate · Information Technology</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 INTRODUCTION -->
+  <section class="section" id="introduction">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-title-group">
+        <div class="section-tag">Opening Remarks</div>
+        <h2 class="section-title">Introduction</h2>
+        <div class="divider"></div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        When I first enrolled in ITEC 23, I expected a technical course — algorithms, systems, frameworks. What I encountered instead was far more unsettling and, ultimately, more important: a course about power, responsibility, and the irreversible consequences of decisions made behind keyboards. The intersection of information technology with social life raises questions that cannot be solved by any amount of code. Who owns the data we generate every second of our lives? What do we owe the people whose systems we build or break? These are not abstract philosophical puzzles — they are live issues that shape careers, freedoms, and futures.
+      </p>
+      <p>
+        Two topics captured my attention above all others. The first is cybersecurity ethics — particularly ransomware and the grey zone between defensive research and criminal exploitation. I became fascinated by how rapidly a tool designed for legitimate penetration testing can be weaponized, and how organizations, individuals, and even governments struggle to respond without resorting to ethically dubious countermeasures. The second is the issue of online accountability: cyber libel, sextortion, and identity-based harassment. These are forms of violence that leave no bruises visible to the naked eye, yet they destroy reputations, careers, and mental health just as surely. The law often lags years behind the technology, and it falls to IT professionals to fill that gap responsibly.
+      </p>
+      <p>
+        I believe these topics matter beyond the classroom because, as future IT professionals, we are not passive bystanders in the digital world — we are its architects. Every system we design, every line of code we deploy, either reinforces or dismantles existing power structures. ITEC 23 gave me a vocabulary and a framework for thinking about that responsibility, and this portfolio is my attempt to demonstrate what I have internalized, not just what I have memorized.
+      </p>
+    </div>
+
+    <div class="pull-quote">
+      <blockquote>"With great computing power comes great ethical responsibility — and ignorance is not a defense."</blockquote>
+      <cite>Ethical Computing, Core Principle</cite>
+    </div>
+
+    <div class="stat-grid">
+      <div>
+        <div class="stat-item-label"><span>Cybercrimes Reported Globally (2023)</span><span>Millions</span></div>
+        <div class="stat-bar"><div class="stat-fill rust" style="width:0%" data-width="87%"></div></div>
+      </div>
+      <div>
+        <div class="stat-item-label"><span>Organizations Hit by Ransomware (2023)</span><span>~72%</span></div>
+        <div class="stat-bar"><div class="stat-fill gold" style="width:0%" data-width="72%"></div></div>
+      </div>
+      <div>
+        <div class="stat-item-label"><span>Incidents Involving Insider Threats</span><span>~34%</span></div>
+        <div class="stat-bar"><div class="stat-fill forest" style="width:0%" data-width="34%"></div></div>
+      </div>
+      <div>
+        <div class="stat-item-label"><span>Cases Resulting in Prosecution</span><span>~8%</span></div>
+        <div class="stat-bar"><div class="stat-fill slate" style="width:0%" data-width="8%"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 OBJECTIVES -->
+  <section class="section" id="objectives">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-title-group">
+        <div class="section-tag">Purpose & Goals</div>
+        <h2 class="section-title">Objectives</h2>
+        <div class="divider"></div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        This portfolio aims to document and demonstrate my growth in understanding the ethical, social, and professional dimensions of information technology throughout ITEC 23. It serves as evidence that I have moved beyond passive learning — engaging with real-world incidents, applying ethical frameworks, and articulating a personal code of professional conduct that will guide my practice as an IT professional.
+      </p>
+    </div>
+
+    <div class="obj-grid" style="margin-top: 32px;">
+      <div class="obj-card">
+        <div class="obj-card-icon">🎯</div>
+        <h3>Demonstrate Critical Thinking</h3>
+        <p>Apply established ethical theories — Deontology, Virtue Ethics, Utilitarianism — to real-world IT incidents in a structured and reasoned manner.</p>
+      </div>
+      <div class="obj-card">
+        <div class="obj-card-icon">🔍</div>
+        <h3>Analyze Real-World Cases</h3>
+        <p>Examine an actual cybersecurity or digital ethics incident in depth, identifying stakeholders, harms, and systemic failures that enable such events.</p>
+      </div>
+      <div class="obj-card">
+        <div class="obj-card-icon">🌱</div>
+        <h3>Document Personal Growth</h3>
+        <p>Reflect authentically on how this course has shifted my understanding of professional responsibility and the power that comes with technical expertise.</p>
+      </div>
+      <div class="obj-card">
+        <div class="obj-card-icon">📜</div>
+        <h3>Articulate a Professional Pledge</h3>
+        <p>Create a personalized ethical oath that I can hold myself accountable to throughout my career in information technology.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 REFLECTION -->
+  <section class="section" id="reflection">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-title-group">
+        <div class="section-tag">Personal Growth</div>
+        <h2 class="section-title">Reflection</h2>
+        <div class="divider"></div>
+      </div>
+    </div>
+
+    <div class="reflection-layout">
+      <div class="prose">
+        <p>
+          Before ITEC 23, I understood ethics largely as rules to follow — legal compliance, terms of service, institutional policy. What the course dismantled was my comfortable assumption that following the law was the same as acting ethically. The most transformative case we examined was the phenomenon of ransomware — not its technical mechanics, but its moral anatomy. I had to sit with the uncomfortable reality that many of the developers behind ransomware tools began as legitimate security researchers. The line between a penetration tester probing a client's defenses and an attacker encrypting hospital files is not always a technical line. It is, fundamentally, an ethical one.
+        </p>
+        <p>
+          The ethical dilemma that affected me most deeply was the trolley-problem dimension of cybersecurity disclosure. When a researcher discovers a zero-day vulnerability in widely used software, who do they tell first, and when? Notifying the vendor quietly gives them time to patch — but what about the days, weeks, or months of exposure in between? Notifying the public immediately protects awareness but may arm malicious actors before a fix exists. I had no clean answer, but engaging with deontological reasoning (the duty to disclose harm regardless of consequences) and utilitarian calculus (what course of action minimizes total suffering?) gave me a framework for approaching such dilemmas without paralysis. I learned that the absence of a perfect answer does not excuse the absence of a principled one.
+        </p>
+        <p>
+          Looking forward, I intend to carry these lessons into my professional life by cultivating what Aristotle would call practical wisdom — the habit of pausing before action to ask not just "can I do this?" but "should I?" I will advocate for privacy by design in systems I build, support responsible disclosure practices in any security work I undertake, and refuse to participate in projects that weaponize technology against vulnerable individuals. Ethics, I have come to understand, is not a subject studied once and filed away. It is a practice, renewed daily in every professional decision, large or small.
+        </p>
+
+        <div class="pull-quote" style="border-color: var(--rust);">
+          <blockquote style="color: var(--rust);">"Ethics is not a constraint on good engineering — it is a prerequisite for it."</blockquote>
+          <cite>Course Reflection</cite>
+        </div>
+      </div>
+
+      <div class="reflection-aside">
+        <div class="aside-card">
+          <div class="aside-card-label">Key Lesson #1</div>
+          <p>Legality and ethics are not synonyms. An action can be technically legal and still cause profound harm to individuals or communities.</p>
+        </div>
+        <div class="aside-card">
+          <div class="aside-card-label">Key Lesson #2</div>
+          <p>Responsible disclosure is one of the most ethically complex duties an IT professional faces — requiring balance between transparency, harm reduction, and timeliness.</p>
+        </div>
+        <div class="aside-card">
+          <div class="aside-card-label">Key Lesson #3</div>
+          <p>Virtue Ethics reminds us that character matters more than any single decision — consistent, principled behavior builds the integrity that technology requires.</p>
+        </div>
+        <div class="aside-card" style="background: var(--forest);">
+          <div class="aside-card-label" style="color: rgba(245,240,232,0.6);">Guiding Insight</div>
+          <p>The most dangerous IT professional is not the malicious hacker — it is the well-meaning one who never asks whether they <em>should</em>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 CASE STUDY -->
+  <section class="section" id="casestudy">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div class="section-title-group">
+        <div class="section-tag">Real-World Analysis</div>
+        <h2 class="section-title">Case Study Analysis</h2>
+        <div class="divider"></div>
+      </div>
+    </div>
+
+    <!-- Incident Banner -->
+    <div class="incident-banner">
+      <div>
+        <div class="incident-sub">Case Study — Data Privacy Scandal</div>
+        <div class="incident-title">Facebook & Cambridge Analytica</div>
+        <p class="incident-desc">One of the most consequential data privacy scandals in history — in which the personal data of up to 87 million Facebook users was harvested without meaningful consent and weaponized to influence democratic elections worldwide.</p>
+      </div>
+      <div class="incident-badge">
+        <span class="incident-badge-icon">📊</span>
+        <span class="incident-badge-label">Exposed 2018 · Global Impact</span>
+      </div>
+    </div>
+
+    <!-- 4.1 Summary -->
+    <div class="case-block">
+      <span class="case-block-label slate">4.1 — Incident Summary</span>
+      <h3>What Happened</h3>
+      <p>In 2013, Cambridge University researcher Aleksandr Kogan developed a Facebook quiz app called "thisisyourdigitallife." While only around 270,000 people installed the app and consented to data collection, Facebook's API at the time allowed the app to also harvest data from each user's entire friend network — without those friends' knowledge or consent. This resulted in the personal data of approximately 87 million Facebook users being collected.</p>
+      <p style="margin-top:14px;">Kogan passed this data to Cambridge Analytica, a British political consulting firm. Cambridge Analytica then used the data to build detailed psychographic profiles of American voters, which were sold to political campaigns — most notably the 2016 U.S. presidential campaign of Donald Trump and the Brexit "Leave" campaign in the United Kingdom. The scandal broke publicly in March 2018 through reporting by The Guardian and The New York Times, triggering global regulatory scrutiny, a U.S. Senate hearing where Mark Zuckerberg testified, and a record $5 billion FTC fine against Facebook.</p>
+
+      <div class="screenshot-mockup" style="margin-top:28px;">
+        <div class="mockup-bar">
+          <div class="mockup-dot red"></div>
+          <div class="mockup-dot yellow"></div>
+          <div class="mockup-dot green"></div>
+          <div class="mockup-url">developers.facebook.com > graph-api > v2.0 > changelog</div>
+        </div>
+        <div class="mockup-content">
+          <div class="code-line"><span class="code-ln">1</span><span class="code-cmt">// Facebook Graph API — Friend Data Access (Pre-2015, Simulated)</span></div>
+          <div class="code-line"><span class="code-ln">2</span><span class="code-text">&nbsp;</span></div>
+          <div class="code-line"><span class="code-ln">3</span><span class="code-key">GET</span><span class="code-text"> /me/friends?fields=</span><span class="code-str">id,name,location,likes,religion,politics</span></div>
+          <div class="code-line"><span class="code-ln">4</span><span class="code-text">&nbsp;</span></div>
+          <div class="code-line"><span class="code-ln">5</span><span class="code-cmt">// Response: data of ALL friends, not just the consenting user</span></div>
+          <div class="code-line"><span class="code-ln">6</span><span class="code-key">records_harvested</span><span class="code-text">: </span><span style="color:#ff8888">87,000,000</span></div>
+          <div class="code-line"><span class="code-ln">7</span><span class="code-key">user_consent_obtained</span><span class="code-text">: </span><span style="color:#ff4444">false</span><span class="code-cmt">  // for ~86.73M of those records</span></div>
+          <div class="code-line"><span class="code-ln">8</span><span class="code-key">data_sold_to</span><span class="code-text">: </span><span class="code-str">"Cambridge Analytica Ltd."</span></div>
+          <div class="code-line"><span class="code-ln">9</span><span class="code-key">purpose</span><span class="code-text">: </span><span class="code-str">"psychographic voter profiling"</span></div>
+          <div class="code-line"><span class="code-ln">10</span><span class="code-text">&nbsp;</span></div>
+          <div class="code-line"><span class="code-ln">11</span><span class="code-cmt">// API permission closed April 2015 — 2 years after data harvested</span></div>
+        </div>
+      </div>
+
+      <!-- Timeline visual -->
+      <div style="margin-top:32px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+        <div style="background:var(--cream);border-radius:8px;padding:20px 16px;border-top:3px solid var(--slate);text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--slate);">2013</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">Kogan's app harvests data from 87M Facebook users via friend API</div>
+        </div>
+        <div style="background:var(--cream);border-radius:8px;padding:20px 16px;border-top:3px solid var(--gold);text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--gold);">2016</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">Data used to target voters in U.S. Presidential Election & Brexit referendum</div>
+        </div>
+        <div style="background:var(--cream);border-radius:8px;padding:20px 16px;border-top:3px solid var(--rust);text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--rust);">2018</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">Scandal breaks publicly; Zuckerberg testifies before U.S. Senate</div>
+        </div>
+        <div style="background:var(--cream);border-radius:8px;padding:20px 16px;border-top:3px solid var(--forest);text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--forest);">$5B</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">FTC fine against Facebook — largest ever data-privacy penalty at the time</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4.2 Ethical Issues -->
+    <div class="case-block">
+      <span class="case-block-label rust">4.2 — Ethical Issues Identified</span>
+      <h3>The Moral Dimensions</h3>
+      <ul>
+        <li><strong>Violation of Informed Consent:</strong> The 87 million people whose data was harvested never agreed to have their information used for political profiling. Consent obtained from a small subset of users was silently extended to their entire social graph — a fundamental betrayal of the consent principle that underlies all ethical data practice.</li>
+        <li><strong>Manipulation of Democratic Processes:</strong> Using psychological profiles built from private data to target and influence voters strikes at the heart of democratic autonomy. Citizens were subjected to precisely tailored political messaging without any awareness that they were being profiled.</li>
+        <li><strong>Failure of Platform Stewardship:</strong> Facebook had the technical means and the contractual authority to prevent third-party misuse of user data. Its failure to enforce its own policies — and to audit what data Cambridge Analytica had retained after a 2015 deletion request — constitutes a serious breach of fiduciary duty to its users.</li>
+        <li><strong>Commodification of Personal Identity:</strong> People's political beliefs, religious views, and relationship status — deeply personal attributes — were reduced to data points bought and sold for commercial profit, without those individuals receiving any benefit or even acknowledgment.</li>
+        <li><strong>Transparency Deficit:</strong> Facebook delayed informing affected users for years after learning of the breach internally. This lack of transparency amplified harm and eroded public trust in digital platforms as institutions capable of responsible self-governance.</li>
+      </ul>
+    </div>
+
+    <!-- 4.3 Ethical Theories -->
+    <div class="case-block">
+      <span class="case-block-label gold">4.3 — Ethical Theories Applied</span>
+      <h3>Analyzing Through Ethical Frameworks</h3>
+
+      <div class="theory-grid" style="margin-top: 20px;">
+        <div class="theory-card deontology">
+          <div class="theory-icon">⚖️</div>
+          <div class="theory-name">Deontological Ethics</div>
+          <p>Kant's categorical imperative demands that we never treat persons merely as means to an end. Facebook and Cambridge Analytica did exactly this — 87 million individuals were converted into data instruments for profit and political manipulation, their autonomy disregarded entirely. A universalizable rule "companies may harvest and sell user data without consent" would destroy the social contract on which digital platforms depend.</p>
+        </div>
+        <div class="theory-card virtue">
+          <div class="theory-icon">🏛️</div>
+          <div class="theory-name">Virtue Ethics</div>
+          <p>Aristotle's framework centers on character. A virtuous data steward would embody honesty, transparency, and justice — disclosing clearly what data is collected and how it is used. Facebook's culture of "move fast and break things" reflects the opposite: an institutional character defined by opacity, expedience, and the subordination of users' interests to growth metrics. The scandal is, at root, a failure of organizational virtue.</p>
+        </div>
+        <div class="theory-card utilitarian">
+          <div class="theory-icon">📊</div>
+          <div class="theory-name">Utilitarian Ethics</div>
+          <p>Even granting that Cambridge Analytica's clients derived political benefit, the aggregate harm is staggering: millions of people's autonomy compromised, democratic institutions undermined, global trust in digital platforms shattered, and a regulatory backlash (GDPR, CCPA) that imposed sweeping costs on the entire industry. The total harm vastly outweighs any narrow gain, making the consequentialist case against the scandal equally damning.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4.4 Solutions -->
+    <div class="case-block">
+      <span class="case-block-label forest">4.4 — Proposed Solutions & Interventions</span>
+      <h3>Ethical Pathways Forward</h3>
+      <ul>
+        <li><strong>Granular, Meaningful Consent:</strong> Platforms must obtain explicit, informed consent for every specific use of personal data — not buried in a 30-page terms of service. Users should be able to see, edit, and revoke data permissions at any time through a clear, accessible dashboard.</li>
+        <li><strong>Data Minimization Principles:</strong> IT professionals should design systems that collect only the data strictly necessary for the stated purpose. Harvesting a user's friend network to improve a quiz app has no legitimate basis and should be technically prevented, not just contractually prohibited.</li>
+        <li><strong>Third-Party Auditing:</strong> Platforms that grant API access to developers should conduct regular, independent audits to verify that developer data practices comply with stated policies — and should revoke access and notify users immediately upon discovery of violations.</li>
+        <li><strong>Strong Regulatory Enforcement:</strong> The EU's General Data Protection Regulation (GDPR), enacted partly in response to this scandal, provides a model: mandatory breach notification, the right to erasure, and fines proportional to global revenue rather than fixed amounts that large corporations can absorb as a cost of business.</li>
+        <li><strong>Algorithmic Transparency:</strong> When data is used to make decisions that affect individuals — including political targeting — those individuals have a right to know that profiling is occurring. Mandatory disclosure of targeted political advertising (as now required in several jurisdictions) is a minimum standard, not a ceiling.</li>
+        <li><strong>Ethics Education for Developers:</strong> The engineers who built Facebook's friend-data API likely never considered the downstream harms of their design choices. Embedding ethical impact assessment into software development practice — as a standard step alongside security review — would help prevent future platforms from building the same vulnerabilities by default.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 05 PLEDGE -->
+  <section class="section" id="pledge">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div class="section-title-group">
+        <div class="section-tag">My Commitment</div>
+        <h2 class="section-title">Professional Ethics Pledge</h2>
+        <div class="divider"></div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-bottom: 40px;">
+      <p>The following oath represents my personal commitment to ethical practice as an IT professional. It is not a set of constraints imposed from outside — it is a statement of who I intend to be.</p>
+    </div>
+
+    <div class="pledge-wrap">
+      <div class="pledge-intro">I, as a future Information Technology professional, solemnly pledge the following:</div>
+      <div class="pledge-title">The IT Professional's Oath</div>
+
+      <ul class="pledge-list">
+        <li class="pledge-item">
+          <div class="pledge-num">I.</div>
+          <div class="pledge-text">
+            <h4>I will protect the privacy and data of every person my work touches.</h4>
+            <p>Data is not an abstract resource — it is a trace of human life. I will treat every record, credential, and personal detail entrusted to systems I build or maintain as if it belonged to someone I love. I will apply privacy by design, collect only what is necessary, and advocate against surveillance architectures that reduce people to data points.</p>
+          </div>
+        </li>
+        <li class="pledge-item">
+          <div class="pledge-num">II.</div>
+          <div class="pledge-text">
+            <h4>I will never weaponize my technical skills against vulnerable individuals.</h4>
+            <p>Technical knowledge is power, and power misused causes real harm. I will not participate in sextortion, cyber harassment, unauthorized access, or any use of technology intended to coerce, humiliate, or harm individuals — regardless of whether such acts are prosecutable under current law.</p>
+          </div>
+        </li>
+        <li class="pledge-item">
+          <div class="pledge-num">III.</div>
+          <div class="pledge-text">
+            <h4>I will practice and advocate for responsible disclosure.</h4>
+            <p>When I discover vulnerabilities, I will follow responsible disclosure practices — notifying affected parties with adequate time to patch, while ultimately prioritizing the safety of users over my own convenience or career advancement. I will not hoard zero-days for competitive or financial advantage.</p>
+          </div>
+        </li>
+        <li class="pledge-item">
+          <div class="pledge-num">IV.</div>
+          <div class="pledge-text">
+            <h4>I will be honest about what my systems can and cannot do.</h4>
+            <p>Overpromising capabilities — especially in security-sensitive domains — creates false assurance that kills. I will be transparent with clients, employers, and the public about the limitations of any system I build, and I will resist pressure to ship something I know is dangerously insecure.</p>
+          </div>
+        </li>
+        <li class="pledge-item">
+          <div class="pledge-num">V.</div>
+          <div class="pledge-text">
+            <h4>I will continuously educate myself on the evolving ethical landscape of technology.</h4>
+            <p>The digital world changes faster than any curriculum can capture. Emerging technologies — AI, biometrics, autonomous systems — raise new ethical questions every year. I commit to treating ethical learning as a professional obligation, not a one-time box to check, and to bring what I learn into every team and organization I join.</p>
+          </div>
+        </li>
+        <li class="pledge-item">
+          <div class="pledge-num">VI.</div>
+          <div class="pledge-text">
+            <h4>I will speak up when I witness unethical practice, even when it is costly.</h4>
+            <p>Silence in the face of wrongdoing is its own form of participation. Whether it is a manager demanding impossible security shortcuts, a client requesting a system designed for surveillance, or a colleague exfiltrating data — I will raise concerns through proper channels, and if those fail, through whatever ethical alternatives exist. Moral courage is not optional for professionals who hold public trust.</p>
+          </div>
+        </li>
+      </ul>
+
+      <div class="pledge-signature">
+        <div>
+          <div class="signature-line"></div>
+          <div class="signature-label">Signature of Pledge</div>
+        </div>
+        <div>
+          <div class="signature-line"></div>
+          <div class="signature-label">Date</div>
+        </div>
+        <div>
+          <div class="signature-line"></div>
+          <div class="signature-label">Student Name</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-text">ITEC 23 · Individual Digital Portfolio · AY 2024–2025</div>
+    <div class="footer-tag">Ethics is not a subject — it is a practice.</div>
+  </footer>
+</main>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  // Reading progress bar
+  window.addEventListener('scroll', () => {
+    const main = document.querySelector('.main');
+    const scrollTop = window.scrollY;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    document.getElementById('readingProgress').style.width = progress + '%';
+
+    // Back to top
+    const btn = document.getElementById('backToTop');
+    if (scrollTop > 400) btn.classList.add('show');
+    else btn.classList.remove('show');
+  });
+
+  // Section visibility (Intersection Observer)
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.08 });
+  sections.forEach(s => observer.observe(s));
+
+  // Animate stat bars when visible
+  const bars = document.querySelectorAll('.stat-fill[data-width]');
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const bar = entry.target;
+        setTimeout(() => { bar.style.width = bar.dataset.width; }, 200);
+        barObserver.unobserve(bar);
+      }
+    });
+  }, { threshold: 0.5 });
+  bars.forEach(b => barObserver.observe(b));
+
+  // Active TOC highlight
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const sectionEls = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sectionEls.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) current = sec.getAttribute('id');
+    });
+    tocLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  });
+
+  // Ransomware countdown (visual/educational only)
+  let h = 71, m = 58, s = 42;
+  setInterval(() => {
+    s--;
+    if (s < 0) { s = 59; m--; }
+    if (m < 0) { m = 59; h--; }
+    if (h < 0) { h = 0; m = 0; s = 0; }
+    document.getElementById('hours').textContent = String(h).padStart(2,'0');
+    document.getElementById('mins').textContent = String(m).padStart(2,'0');
+    document.getElementById('secs').textContent = String(s).padStart(2,'0');
+  }, 1000);
+</script>
+</body>
+</html>
